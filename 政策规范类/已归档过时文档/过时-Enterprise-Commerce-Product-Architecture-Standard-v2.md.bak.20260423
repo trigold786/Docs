@@ -1,0 +1,270 @@
+# 企业商业化产品黄金标准 v2.0
+## KeyVault Pro - AI API密钥管理系统
+
+---
+
+## 一、架构规范
+
+### 1.1 技术栈
+| 组件 | 选择 | 说明 |
+|------|------|------|
+| 后端框架 | FastAPI | Python异步框架，高性能 |
+| 前端框架 | Vue 3 + TypeScript | 现代化响应式前端 |
+| 数据库 | PostgreSQL | 企业级关系数据库 |
+| 缓存/Session | Redis | 高性能缓存和Session存储 |
+| ORM | SQLAlchemy 2.0 | 类型安全的ORM |
+| Web服务器 | Nginx | 反向代理和静态文件服务 |
+| 容器化 | Docker + Docker Compose | 环境一致性 |
+
+### 1.2 项目结构
+```
+keyvault-pro/
+├── backend/                    # FastAPI后端
+│   ├── app/
+│   │   ├── api/              # API路由
+│   │   │   ├── v1/
+│   │   │   │   ├── auth.py   # 认证接口
+│   │   │   │   ├── keys.py    # 密钥管理接口
+│   │   │   │   └── account.py # 账户管理接口
+│   │   │   └── deps.py       # 依赖注入
+│   │   ├── core/             # 核心配置
+│   │   │   ├── config.py     # 应用配置
+│   │   │   ├── security.py   # 安全工具
+│   │   │   └── encryption.py # 加密工具
+│   │   ├── models/           # 数据库模型
+│   │   │   ├── user.py
+│   │   │   └── api_key.py
+│   │   ├── schemas/           # Pydantic模型
+│   │   │   ├── auth.py
+│   │   │   ├── key.py
+│   │   │   └── common.py
+│   │   ├── services/          # 业务逻辑
+│   │   │   ├── auth_service.py
+│   │   │   ├── key_service.py
+│   │   │   └── notification_service.py
+│   │   ├── db/                # 数据库连接
+│   │   └── main.py            # 应用入口
+│   ├── alembic/               # 数据库迁移
+│   ├── requirements.txt
+│   └── Dockerfile
+├── frontend/                   # Vue 3前端
+│   ├── src/
+│   │   ├── api/              # API调用
+│   │   ├── components/       # 组件库
+│   │   ├── views/            # 页面
+│   │   ├── stores/           # 状态管理
+│   │   ├── i18n/              # 国际化
+│   │   ├── router/            # 路由
+│   │   └── styles/           # 样式
+│   ├── index.html
+│   ├── vite.config.ts
+│   ├── package.json
+│   └── Dockerfile
+├── docker-compose.yml
+└── README.md
+```
+
+---
+
+## 二、数据库设计
+
+### 2.1 用户表 (users)
+```sql
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(64) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE,
+    phone VARCHAR(20) UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    password_changed_at TIMESTAMP DEFAULT NOW(),
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+### 2.2 API密钥表 (api_keys)
+```sql
+CREATE TABLE api_keys (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    provider VARCHAR(50) NOT NULL,
+    api_key_encrypted TEXT NOT NULL,
+    token TEXT,
+    model VARCHAR(100),
+    org VARCHAR(100),
+    is_hidden BOOLEAN DEFAULT FALSE,
+    last_used_at TIMESTAMP,
+    usage_count INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+### 2.3 会话表 (sessions)
+```sql
+CREATE TABLE sessions (
+    id VARCHAR(255) PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    data JSONB,
+    created_at TIMESTAMP DEFAULT NOW(),
+    expires_at TIMESTAMP NOT NULL
+);
+```
+
+### 2.4 验证码表 (verification_codes)
+```sql
+CREATE TABLE verification_codes (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    type VARCHAR(20) NOT NULL, -- email, sms
+    code VARCHAR(10) NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    expires_at TIMESTAMP NOT NULL,
+    used_at TIMESTAMP
+);
+```
+
+---
+
+## 三、API接口规范
+
+### 3.1 认证模块
+| 方法 | 路径 | 说明 | 认证 |
+|------|------|------|------|
+| POST | /api/v1/auth/register | 用户注册 | 否 |
+| POST | /api/v1/auth/login | 用户登录 | 否 |
+| POST | /api/v1/auth/logout | 退出登录 | Cookie |
+| GET | /api/v1/auth/csrf | 获取CSRF Token | 否 |
+
+### 3.2 密钥管理模块
+| 方法 | 路径 | 说明 | 认证 |
+|------|------|------|------|
+| GET | /api/v1/keys | 获取密钥列表 | Cookie |
+| POST | /api/v1/keys | 创建密钥 | Cookie+CSRF |
+| GET | /api/v1/keys/{id} | 获取密钥详情 | Cookie |
+| PUT | /api/v1/keys/{id} | 更新密钥 | Cookie+CSRF |
+| DELETE | /api/v1/keys/{id} | 删除密钥 | Cookie+CSRF |
+
+### 3.3 账户管理模块
+| 方法 | 路径 | 说明 | 认证 |
+|------|------|------|------|
+| POST | /api/v1/account/send-code | 发送验证码 | Cookie |
+| POST | /api/v1/account/change-password | 修改密码 | Cookie+CSRF |
+| POST | /api/v1/account/delete | 注销账户 | Cookie+CSRF |
+
+---
+
+## 四、安全规范
+
+### 4.1 密码安全
+- 最小8位，包含大小写字母、数字、特殊字符
+- 不能包含用户名连续3个字符
+- 密码强度实时反馈（弱/中/强）
+- 密码修改需验证码确认
+- 90天密码过期提醒
+
+### 4.2 会话安全
+- Session ID使用 cryptographically secure random
+- HttpOnly + Secure + SameSite= Lax Cookie
+- 7天会话过期
+- 60次/分钟API速率限制
+
+### 4.3 CSRF防护
+- 所有写操作需要CSRF Token
+- Token存放在Cookie和响应中
+- 双重提交Cookie模式
+
+### 4.4 API Key加密
+- 使用Fernet对称加密（AES-128-CBC）
+- 加密密钥通过环境变量配置
+- 密钥在数据库中以密文存储
+
+---
+
+## 五、支持的AI Provider（24个）
+
+| Provider | 字段配置 | 官方文档 |
+|----------|----------|----------|
+| OpenAI | api_key, organization | https://platform.openai.com |
+| Anthropic | api_key | https://anthropic.com |
+| 阿里云百炼 | api_key, base_url | https://bailian.console.aliyun.com |
+| DeepSeek | api_key, base_url | https://platform.deepseek.com |
+| Groq | api_key, base_url | https://console.groq.com |
+| HuggingFace | api_key | https://huggingface.co |
+| Azure OpenAI | api_key, base_url, api_version | https://azure.microsoft.com |
+| Cohere | api_key | https://cohere.com |
+| AI21 Labs | api_key | https://ai21.com |
+| Stability AI | api_key | https://stability.ai |
+| Zhipu AI | api_key | https://open.bigmodel.cn |
+| Moonshot AI | api_key, base_url | https://platform.moonshot.cn |
+| 01.AI | api_key, base_url | https://platform.01.ai |
+| StepFun AI | api_key | https://stepfun.com |
+| IBM watsonx | api_key, base_url, project_id | https://ibm.com/watsonx |
+| Replicate | api_key | https://replicate.com |
+| RunPod | api_key, base_url | https://runpod.io |
+| Modal | api_key | https://modal.com |
+| Together AI | api_key | https://together.ai |
+| Perplexity | api_key | https://perplexity.ai |
+| Lepton AI | api_key, base_url | https://lepton.ai |
+| Vercel AI | api_key | https://vercel.com/ai |
+| Meta AI | api_key | https://ai.meta.com |
+| Mistral AI | api_key | https://mistral.ai |
+| OpenRouter | api_key, base_url | https://openrouter.ai |
+
+---
+
+## 六、改进点（相对于原站）
+
+### 6.1 架构改进
+- [x] 前后端分离架构
+- [x] Vue 3 + TypeScript现代化前端
+- [x] PostgreSQL企业级数据库
+- [x] Redis高性能缓存
+- [x] Docker容器化部署
+- [x] RESTful API设计
+
+### 6.2 安全改进
+- [x] 完善的CSRF防护机制
+- [x] 密码强度实时校验
+- [x] API Key加密存储
+- [x] 速率限制保护
+- [x] 审计日志记录
+- [x] 密码过期机制
+
+### 6.3 功能改进
+- [x] 密钥使用统计
+- [x] 密钥最后使用时间
+- [x] 批量操作支持
+- [x] 密钥导入/导出
+- [x] 密钥使用量预警
+- [x] 多语言支持扩展
+
+### 6.4 运维改进
+- [x] 健康检查端点
+- [x] Prometheus监控指标
+- [x] 结构化日志
+- [x] 数据库迁移工具
+- [x] 环境变量配置
+- [x] 备份恢复机制
+
+---
+
+## 七、质量标准
+
+### 7.1 代码质量
+- 所有API必须通过类型校验（Pydantic）
+- 单元测试覆盖率 > 80%
+- 代码风格遵循Black + Ruff
+- 安全扫描通过Bandit
+
+### 7.2 性能标准
+- API响应时间 P95 < 200ms
+- 并发支持 > 1000 QPS
+- 数据库连接池大小可配置
+
+### 7.3 可用性标准
+- 99.9% 服务可用性
+- 自动故障恢复
+- 优雅关闭机制

@@ -1,0 +1,33 @@
+# SYS-005: 新规范同步义务
+
+## 状态
+强制执行 | 2026-04-19
+
+## 要求
+
+当 Hermes Agent 系统内新建或更新任何规则、标准、守则、强制规范时：
+
+1. **确认完成**后，立即将规范内容同步写入 `~/.openclaw/SYSTEM_PROTOCOLS/`
+2. **通知** OpenClaw：告知新增/变更的规范编号、名称和位置
+3. **OpenClaw 确认**：OpenClaw 必须读取并确认理解该规范
+4. **不可遗漏**：未同步通知的规范不得要求 OpenClaw 执行
+
+## 当前规范列表
+
+```
+~/.openclaw/SYSTEM_PROTOCOLS/
+├── SYS-000-MASTER.md    （总览 + 附录 OpenClaw 配置状态）
+├── SYS-001-contributor-identity.md
+├── SYS-002-golden-standard-mandate.md
+├── SYS-003-model-switch-discipline.md
+├── SYS-004-subagent-development-workflow.md
+├── SYS-005-sync-obligation.md
+└── SYS-006-neuro-note-preferences.md
+```
+
+## OpenClaw 确认协议
+
+新增规范时，OpenClaw 必须：
+1. 读取 `~/.openclaw/SYSTEM_PROTOCOLS/SYS-XXX-<name>.md`
+2. 确认理解所有条款
+3. 在响应中明确表示已遵守

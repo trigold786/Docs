@@ -1,0 +1,37 @@
+# SYS-001: Contributor Identity — CHANGELOG 强制校验
+
+## 状态
+强制执行 | 2026-04-19
+
+## 要求
+
+每次向受保护分支（`master` / `main` / `dev`）推送前，`CHANGELOG.md` 的最新版本条目中
+必须包含以下 `## Contributor Identity` 段落：
+
+```markdown
+## Contributor Identity
+- **GitHub ID**: <your-github-username>
+- **Application & Version**: <app>-v<version>
+- **Content Author (Model ID)**: <model-id>
+```
+
+## 三字段说明
+
+| 字段 | 必填 | 示例 |
+|------|------|------|
+| GitHub ID | ✅ | `trigoldsun` |
+| Application & Version | ✅ | `openclaw-v2026.4.14`、`hermes-v1.0.0` |
+| Content Author (Model ID) | ✅ | `qwen3-max`、`MiniMax-M2.7` |
+
+## 校验关键词
+
+三关键词宽松匹配（大小写不敏感）：`github` / `application` / `model`
+
+## 校验脚本
+
+`~/.git-hooks/pre-push` — 全局 pre-push hook，GitHub push 前自动执行。
+
+## OpenClaw 义务
+
+OpenClaw 在执行任何 Git push 操作前，必须先确认 CHANGELOG 中存在有效的
+`## Contributor Identity` 段落。若不存在或字段缺失，必须拒绝 push 并提示用户。

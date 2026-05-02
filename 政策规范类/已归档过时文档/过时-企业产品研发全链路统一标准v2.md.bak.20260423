@@ -1,0 +1,1169 @@
+# 企业产品研发全链路统一标准 / Unified Enterprise Product R&D Full-Stack Standard
+## UNI-MANDATORY-001
+
+**版本 / Version**：v2.1.0
+**日期 / Date**：2026-04-19
+**性质 / Nature**：唯一权威标准 / Sole Authoritative Standard
+**编号 / Code**：UNI-MANDATORY-001
+
+---
+
+## 目录 / Table of Contents
+
+1. [权威声明 / Authority Statement](#权威声明--authority-statement)
+2. [术语定义总表 / Glossary of All Abbreviations](#术语定义总表--glossary-of-all-abbreviations)
+3. [第一部分：L1 强制标准 / Part I: L1 Mandatory Standards](#第一部分l1-强制标准--part-i-l1-mandatory-standards)
+   - [L1-001：架构分层禁令 / Architecture Layering Prohibition](#l1-001架构分层禁令--architecture-layering-prohibition)
+   - [L1-002：依赖管控禁令 / Dependency Management Prohibition](#l1-002依赖管控禁令--dependency-management-prohibition)
+   - [L1-003：三大基础模块强制接入 / Three Core Foundation Modules](#l1-003三大基础模块强制接入--three-core-foundation-modules)
+   - [L1-004：数据边界 / Data Boundary](#l1-004数据边界--data-boundary)
+   - [L1-005：安全基线 / Security Baseline](#l1-005安全基线--security-baseline)
+   - [L1-006：接口规范 / API Standards](#l1-006接口规范--api-standards)
+   - [L1-007：事件通信 / Event Communication](#l1-007事件通信--event-communication)
+   - [L1-008：版本管理 / Version Management](#l1-008版本管理--version-management)
+   - [L1-009：命名规范 / Naming Convention](#l1-009命名规范--naming-convention)
+   - [L1-010：质量门槛 / Quality Threshold](#l1-010质量门槛--quality-threshold)
+   - [L1-011：调试纪律（铁律）/ Debugging Discipline (Iron Rule)](#l1-011调试纪律铁律--debugging-discipline-iron-rule)
+4. [第二部分：L2 标准 / Part II: L2 Standards](#第二部分l2-标准--part-ii-l2-standards)
+   - [L2-001：模块划分 / Module Division](#l2-001模块划分--module-division)
+   - [L2-002：架构设计评审门槛 / Architecture Review Threshold](#l2-002架构设计评审门槛--architecture-review-threshold)
+   - [L2-003：基础模块复用评估 / Foundation Module Reuse Evaluation](#l2-003基础模块复用评估--foundation-module-reuse-evaluation)
+   - [L2-004：容错与韧性设计 / Fault Tolerance and Resilience Design](#l2-004容错与韧性设计--fault-tolerance-and-resilience-design)
+   - [L2-005：可观测性设计 / Observability Design](#l2-005可观测性设计--observability-design)
+   - [L2-006：技术选型 / Technology Stack](#l2-006技术选型--technology-stack)
+   - [L2-007：数据库与存储选型 / Database & Storage Selection](#l2-007数据库与存储选型--database--storage-selection)
+   - [L2-008：API设计 / API Design](#l2-008api设计--api-design)
+   - [L2-009：等保二级技术要求（30项强制接入）/ Equal Protection Level-2 Technical Requirements](#l2-009等保二级技术要求30项强制接入--equal-protection-level-2-technical-requirements)
+5. [第三部分：L3 规则 / Part III: L3 Rules](#第三部分l3-规则--part-iii-l3-rules)
+   - [L3-001：编码通用原则 / General Coding Principles](#l3-001编码通用原则--general-coding-principles)
+   - [L3-002：多语言编码规范 / Multi-Language Coding Standards](#l3-002多语言编码规范--multi-language-coding-standards)
+   - [L3-003：安全编码 / Secure Coding](#l3-003安全编码--secure-coding)
+   - [L3-004：Git工作流 / Git Workflow](#l3-004git工作流--git-workflow)
+   - [L3-005：TDD红绿重构循环 / TDD Red-Green-Refactor Cycle](#l3-005tdd红绿重构循环--tdd-red-green-refactor-cycle)
+   - [L3-006：测试金字塔 / Testing Pyramid](#l3-006测试金字塔--testing-pyramid)
+   - [L3-007：灰度与回滚 / Gradual Release and Rollback](#l3-007灰度与回滚--gradual-release-and-rollback)
+   - [L3-008：CI五阶段门控 / CI Five-Stage Gate](#l3-008ci五阶段门控--ci-five-stage-gate)
+   - [L3-009：代码注释规范 / Code Commenting Standards](#l3-009代码注释规范--code-commenting-standards)
+   - [L3-010：API端点注释 / API Endpoint Documentation](#l3-010api端点注释--api-endpoint-documentation)
+6. [第四部分：L4 规范 / Part IV: L4 Specifications](#第四部分l4-规范--part-iv-l4-specifications)
+   - [L4-001：Kubernetes加固 / Kubernetes Hardening](#l4-001kubernetes加固--kubernetes-hardening)
+   - [L4-002：监控四大支柱 / Four Pillars of Monitoring](#l4-002监控四大支柱--four-pillars-of-monitoring)
+   - [L4-003：告警分级 / Alert Severity Classification](#l4-003告警分级--alert-severity-classification)
+   - [L4-004：SLA计算 / SLA Calculation](#l4-004sla计算--sla-calculation)
+   - [L4-005：结构化日志 / Structured Logging](#l4-005结构化日志--structured-logging)
+   - [L4-006：Saga分布式事务 / Saga Distributed Transaction Pattern](#l4-006saga分布式事务--saga-distributed-transaction-pattern)
+   - [L4-007：CQRS读写分离 / CQRS Read-Write Separation](#l4-007cqrs读写分离--cqrs-read-write-separation)
+   - [L4-008：发布流程 / Release Process](#l4-008发布流程--release-process)
+7. [第五部分：L5 推荐 / Part V: L5 Recommended Practices](#第五部分l5-推荐--part-v-l5-recommended-practices)
+   - [L5-001：数据建模 / Data Modeling](#l5-001数据建模--data-modeling)
+   - [L5-002：事件风暴 / Event Storming](#l5-002事件风暴--event-storming)
+   - [L5-003：等保三级增强 / Equal Protection Level-3 Enhanced Requirements](#l5-003等保三级增强--equal-protection-level-3-enhanced-requirements)
+   - [L5-004：等保定级预测 / Equal Protection Level Prediction](#l5-004等保定级预测--equal-protection-level-prediction)
+8. [第六部分：L6 参考 / Part VI: L6 Reference](#第六部分l6-参考--part-vi-l6-reference)
+   - [L6-001：术语表 / Glossary](#l6-001术语表--glossary)
+   - [L6-002：AI服务商清单（24家）/ AI Service Provider List](#l6-002ai服务商清单24家--ai-service-provider-list)
+   - [L6-003：16类基础服务能力矩阵 / 16 Foundation Services Capability Matrix](#l6-00316类基础服务能力矩阵--16-foundation-services-capability-matrix)
+   - [L6-004：基础服务依赖关系矩阵 / Foundation Services Dependency Matrix](#l6-004基础服务依赖关系矩阵--foundation-services-dependency-matrix)
+   - [L6-005：技术实现建议 / Technology Implementation Recommendations](#l6-005技术实现建议--technology-implementation-recommendations)
+9. [归档索引 / Archive Index](#归档索引--archive-index)
+10. [版本历史 / Version History](#版本历史--version-history)
+
+---
+
+## 权威声明 / Authority Statement
+
+**【强制标准-001：最高效力 / Mandatory-001: Supreme Authority】**
+本文档为企业产品研发领域的最高标准文件，所有工作必须严格遵守。
+This document is the highest standard in the field of enterprise product R&D, and all work must strictly comply.
+
+**【强制标准-002：违反后果 / Mandatory-002: Violation Consequences】**
+违反L1强制标准 → 产出视为无效 → 必须整改 → 重新审查，无例外豁免。
+Violating L1 Mandatory Standards → Output is invalid → Must rectify → Re-review, no exceptions.
+
+**【强制标准-003：文件体系 / Mandatory-003: Document System】**
+- L1 强制标准（本文档核心，不可撼动）/ L1 Mandatory Standards (Core of this document, inviolable)
+- L2 标准（架构设计标准）/ L2 Standards (Architecture Design Standards)
+- L3 规则（开发实施规则）/ L3 Rules (Development Implementation Rules)
+- L4 规范（编码/测试/部署规范）/ L4 Specifications (Coding/Testing/Deployment Specifications)
+- L5 推荐（最佳实践）/ L5 Recommended (Best Practices)
+- L6 参考（术语/清单/背景）/ L6 Reference (Terminology/Checklists/Background)
+
+---
+
+## 术语定义总表 / Glossary of All Abbreviations
+
+### 文档特定缩写（Document-Specific Abbreviations）
+
+| 缩写 / Abbr | 全称 / Full Name | 中文 / Chinese |
+|-------------|------------------|----------------|
+| UNI | Unified | 统一标准体系 |
+| ESD | Enterprise Software Development | 企业软件研发 |
+| ECGS | Enterprise Commerce Golden Standard | 企业商业黄金标准 |
+| ECPAS | Enterprise Commerce Product Architecture Standard | 企业商业产品架构标准 |
+| SOUL | Soul Document | 智能体身份人格定义文档 |
+| SYS | System Protocols | 系统协议体系 |
+
+### 模块命名缩写（Module Naming Abbreviations）
+
+| 缩写 / Abbr | 全称 / Full Name | 中文 / Chinese |
+|-------------|------------------|----------------|
+| BASE | Base Foundation | 基础模块前缀 |
+| BIZ | Business Capability | 业务模块前缀 |
+| AGG | Aggregate | 聚合模块前缀 |
+| MEM | Member | 会员业务域 |
+| UAM | User Account Management | 用户账户管理 |
+| SMS | Security Management System | 安全与合规管理 |
+| PAY | Payment and Settlement | 支付与交易模块 |
+| NTF | Notification Service | 消息通知服务 |
+| MOD | Moderation Service | 内容审核服务 |
+| CSC | Customer Service Center | 客服工单服务 |
+| MKT | Marketing Service | 营销优惠服务 |
+| PIM | Points & Membership | 积分会员服务 |
+| GMG | Growth & Marketing | 用户增长服务 |
+| MED | Media Service | 媒体处理服务 |
+| CDN | Content Delivery Network | 内容分发服务 |
+| SRS | Search & Recommendation | 搜索推荐服务 |
+| DAT | Data Acquisition | 数据采集服务 |
+| INS | Insights & Analytics | 分析洞察服务 |
+| STR | Streaming Service | 实时计算服务 |
+| CFG | Configuration Service | 配置与开关服务 |
+| OPS | Operations Efficiency | 运营效率服务 |
+
+### 架构与协议缩写（Architecture & Protocol Abbreviations）
+
+| 缩写 / Abbr | 全称 / Full Name | 中文 / Chinese |
+|-------------|------------------|----------------|
+| ASG | Architecture Steering Group | 架构评审小组 |
+| DDD | Domain-Driven Design | 领域驱动设计 |
+| CQRS | Command Query Responsibility Separation | 命令查询职责分离 |
+| ADR | Architecture Decision Records | 架构决策记录 |
+| BFF | Backend for Frontend | 后端专属前端 |
+| ES | Elasticsearch | Elasticsearch搜索服务 |
+| SLA | Service Level Agreement | 服务级别协议 |
+| SAST | Static Application Security Testing | 静态应用安全测试 |
+| DAST | Dynamic Application Security Testing | 动态应用安全测试 |
+
+### 安全术语缩写（Security Abbreviations）
+
+| 缩写 / Abbr | 全称 / Full Name | 中文 / Chinese |
+|-------------|------------------|----------------|
+| XSS | Cross-Site Scripting | 跨站脚本攻击 |
+| CSRF | Cross-Site Request Forgery | 跨站请求伪造 |
+| RBAC | Role-Based Access Control | 基于角色的访问控制 |
+| ABAC | Attribute-Based Access Control | 基于属性的访问控制 |
+| MFA | Multi-Factor Authentication | 多因素认证 |
+| SSO | Single Sign-On | 单点登录 |
+| HSTS | HTTP Strict Transport Security | HTTP严格传输安全 |
+
+### 版本管理缩写（Version Management Abbreviations）
+
+| 缩写 / Abbr | 全称 / Full Name | 中文 / Chinese |
+|-------------|------------------|----------------|
+| SemVer | Semantic Versioning | 语义化版本控制 |
+| MAJOR | Major Version Number | 主版本号 |
+| MINOR | Minor Version Number | 次版本号 |
+| PATCH | Patch Version Number | 补丁版本号 |
+
+### 质量与可观测性缩写（Quality & Observability Abbreviations）
+
+| 缩写 / Abbr | 全称 / Full Name | 中文 / Chinese |
+|-------------|------------------|----------------|
+| QPS | Queries Per Second | 每秒查询数 |
+| P50/P90/P99 | 50th/90th/99th Percentile | 第50/90/99百分位延迟 |
+| RED | Rate, Errors, Duration | 服务监控三指标 |
+| USE | Utilization, Saturation, Errors | 资源监控三指标 |
+| API | Application Programming Interface | 应用程序接口 |
+| SDK | Software Development Kit | 软件开发工具包 |
+| ORM | Object-Relational Mapping | 对象关系映射 |
+| CI | Continuous Integration | 持续集成 |
+| CD | Continuous Deployment | 持续部署 |
+
+---
+
+## 第一部分：L1 强制标准 / Part I: L1 Mandatory Standards
+
+> L1标准0豁免，违反视为产出无效 / L1 standards have zero exemptions; violations render output invalid
+
+### L1-001：架构分层禁令 / Architecture Layering Prohibition
+
+**调用方向自下而上，禁止逆向 / Call direction is bottom-up, reverse calls are prohibited：**
+
+```
+L4基础设施层：Kubernetes · PostgreSQL · Redis · Kafka · OSS
+    ↑
+L3基础功能模块层：UAM · SMS · PAY · NTF · CFG · MSG · LOG · CACHE · SEARCH · FILE
+    ↑
+L2业务功能模块层：BIZ-MEM · BIZ-ORD · BIZ-PDT · BIZ-MKT
+    ↑
+L1聚合模块层：AGG-USER · AGG-TRADE · AGG-CONTENT
+```
+
+**规则 / Rules：**
+- ① L4 禁止调用上层 / L4 must not call upper layers
+- ② L3 禁止调用 L2/L1 / L3 must not call L2/L1
+- ③ L2 禁止调用其他业务模块 / L2 must not call other business modules
+- ④ L1 通过事件总线通信，禁止同步直接调用 / L1 communicates via event bus, synchronous direct calls are prohibited
+- ⑤ 依赖层级不得超过2层 / Dependency hierarchy must not exceed 2 layers
+
+← 来源 / Source：ESD-MANDATORY-001 §L1-一
+
+### L1-002：依赖管控禁令 / Dependency Management Prohibition
+
+**依赖管理禁止事项 / Prohibited dependency management practices：**
+
+- **循环依赖 / Circular Dependencies**：CI必须检测，不通过禁止合并，0容忍 / CI must detect, merge is prohibited if detected, zero tolerance
+- **跨业务线依赖 / Cross-business Line Dependencies**：禁止 / Prohibited
+- **高层依赖低层具体实现 / High-level depending on low-level implementation**：禁止（依赖抽象而非实现）/ Prohibited (depend on abstraction, not implementation)
+- **构造函数注入 / Constructor Injection**：为首选方式 / Preferred method
+- **依赖层级 / Dependency Hierarchy**：不得超过2层 / Must not exceed 2 layers
+
+← 来源 / Source：ESD-MANDATORY-001 §L1-二
+
+### L1-003：三大基础模块强制接入 / Three Core Foundation Modules
+
+**所有业务模块必须接入以下三个基础模块 / All business modules must integrate the following three foundation modules：**
+
+| 模块 / Module | 代码 / Code | 必须提供的能力 / Required Capabilities |
+|--------------|------------|---------------------------------------|
+| 用户账户管理 / User Account Management | UAM | 注册/登录/会话Token/SSO/MFA / Register/Login/Session Token/SSO/MFA |
+| 系统安全管理 / Security Management | SMS | 权限RBAC/审计日志/数据加密/合规 / RBAC/Audit Logs/Data Encryption/Compliance |
+| 付费支付 / Payment | PAY | 支付通道/订单/订阅/对账 / Payment Channel/Orders/Subscription/Reconciliation |
+
+**调用方式 / Invocation Method：**
+所有业务模块必须通过统一 SDK 调用基础模块，禁止直连对方数据库。
+All business modules must call foundation modules through unified SDK; direct database connections are prohibited.
+
+← 来源 / Source：ESD-MANDATORY-001 §L1-三 + ECGS §2.3/2.4/2.5
+
+### L1-004：数据边界 / Data Boundary
+
+**数据边界规则 / Data boundary rules：**
+
+- 每个模块只能读写自己的数据库 schema/collection / Each module can only read/write its own database schema/collection
+- 跨模块数据共享必须通过 API 或事件总线 / Cross-module data sharing must be via API or event bus
+- 所有表必须包含 / All tables must include：created_at, updated_at, created_by, updated_by
+- 密码禁止明文存储（必须 Argon2id 或 bcrypt）/ Passwords must not be stored in plaintext (Argon2id or bcrypt required)
+- 敏感数据 ChaCha20-Poly1305 或 AES-256 加密存储 / Sensitive data encrypted with ChaCha20-Poly1305 or AES-256
+
+← 来源 / Source：ESD-MANDATORY-001 §L1-四
+
+### L1-005：安全基线 / Security Baseline
+
+**安全威胁与最低要求 / Security threats and minimum requirements：**
+
+| 威胁 / Threat | 最低要求 / Minimum Requirement |
+|-------------|-------------------------------|
+| SQL注入 / SQL Injection | 参数化查询（`?` 占位符），禁止字符串拼接 / Parameterized queries (`?` placeholder), string concatenation prohibited |
+| XSS | 输出转义 + CSP 响应头 / Output escaping + CSP response header |
+| CSRF | Token 验证（32字节随机数），Session HttpOnly / Token verification (32-byte random), Session HttpOnly |
+| 暴力破解 / Brute Force | IP 限速 + 账户锁定（5次失败锁5分钟）/ IP rate limiting + account lockout (5 failures = 5 min lock) |
+| 传输 / Transmission | 全站 HTTPS（TLS 1.2+），HSTS 头 / Full-site HTTPS (TLS 1.2+), HSTS header |
+| 敏感数据 / Sensitive Data | 配置中心加密存储，运行时 KMS 解密 / Encrypted in config center, KMS decryption at runtime |
+| 审计 / Audit | 所有状态变更写日志，不可删除只可追加 / All state changes logged, append-only, non-deletable |
+
+← 来源 / Source：ESD-MANDATORY-001 §L1-五
+
+### L1-006：接口规范 / API Standards
+
+**API设计规范 / API design standards：**
+
+- RESTful API，路径版本化（/v1/ /v2/）/ RESTful API, path-based versioning (/v1/ /v2/)
+- 认证 / Authentication：Bearer Token（JWT）
+- 格式 / Format：application/json
+- 响应 / Response：{ code, message, data, request_id }
+- 废弃 / Deprecation：至少提前 6 个月通知 / At least 6 months advance notice required
+- 状态修改 API 必须校验 CSRF Token / State-modifying APIs must verify CSRF Token
+
+← 来源 / Source：ESD-MANDATORY-001 §L1-六
+
+### L1-007：事件通信 / Event Communication
+
+**事件总线规范 / Event bus standards：**
+
+- 同步 SLA / Sync SLA：P99 ≤ 100ms，可用性 ≥ 99.9% / Availability ≥ 99.9%
+- 事件格式7字段 / Event format (7 fields)：event_id + event_type + module_from + module_to + payload + timestamp + idempotency_key
+- 持久化 / Persistence：Kafka 副本 ≥ 3 / Kafka replication factor ≥ 3
+- 消费者必须幂等 / Consumers must be idempotent
+- 失败事件进入 DLQ（死信队列）/ Failed events go to DLQ (Dead Letter Queue)
+
+← 来源 / Source：ESD-MANDATORY-001 §L1-七
+
+### L1-008：版本管理 / Version Management
+
+**语义化版本控制 / Semantic versioning (SemVer)：**
+
+- **SemVer：MAJOR.MINOR.PATCH**
+  - MAJOR：不兼容变更 / Incompatible changes
+  - MINOR：向后兼容功能新增 / Backward-compatible feature additions
+  - PATCH：向后兼容 bug 修复 / Backward-compatible bug fixes
+- 基础模块不得破坏向后兼容 / Foundation modules must not break backward compatibility
+- 主版本升级必须提供迁移文档 / Major version upgrades require migration documentation
+
+← 来源 / Source：ESD-MANDATORY-001 §L1-九
+
+### L1-009：命名规范 / Naming Convention
+
+**模块命名 / Module naming：**
+- 基础模块 / Foundation modules：BASE-{NAME}（例 / e.g.：BASE-UAM）
+- 业务模块 / Business modules：BIZ-{DOMAIN}-{NAME}（例 / e.g.：BIZ-MEM）
+- 聚合模块 / Aggregate modules：AGG-{DOMAIN}（例 / e.g.：AGG-USER）
+
+**Git仓库 / Git repositories：** {org}/{module-name}
+
+**Commit格式 / Commit format：** <type>(<scope>): <subject>
+
+| type | 中文说明 / Chinese | English |
+|------|-------------------|---------|
+| feat | 新功能 | New feature |
+| fix | 修复bug | Bug fix |
+| docs | 文档更新 | Documentation |
+| style | 格式调整 | Formatting |
+| refactor | 重构 | Refactoring |
+| test | 测试 | Testing |
+| chore | 依赖/构建 | Dependencies/Build |
+
+← 来源 / Source：ESD-MANDATORY-001 §L1-八
+
+### L1-010：质量门槛 / Quality Threshold
+
+**质量门槛要求 / Quality threshold requirements：**
+
+- 单元测试覆盖率 ≥ 80%（CI 不通过禁止合并）/ Unit test coverage ≥ 80% (CI gate: merge blocked if failed)
+- 所有 Merge/PR 至少 1 人审批 / All Merge/PRs require at least 1 approver
+- 重大变更必须架构评审 / Major changes require architecture review
+- 安全问题 / Security：SAST+DAST 扫描，High/Critical 禁止上线 / SAST+DAST scan, High/Critical prohibited from deployment
+- 灰度发布 / Gradual release：10% → 30% → 50% → 100%
+- 自动回滚 / Auto-rollback：错误率 > 1% 或 P99 > 500ms
+
+← 来源 / Source：ESD-MANDATORY-001 §L1-十
+
+### L1-011：调试纪律（铁律）/ Debugging Discipline (Iron Rule)
+
+**铁律 / Iron Rule：未完成 Phase 1，不得提出任何修复方案。/ Phase 1 must be completed before any fix is proposed.**
+
+**Phase 1（根因调查）/ Phase 1 (Root Cause Investigation)：**
+仔细阅读错误 / 可靠复现 / 检查最近变更 / 追踪数据流
+Carefully read errors / Reliably reproduce / Check recent changes / Trace data flow
+
+**Phase 2（模式分析）/ Phase 2 (Pattern Analysis)：**
+找相似正常代码 / 对比参考 / 识别差异 / 理解依赖
+Find similar working code / Compare references / Identify differences / Understand dependencies
+
+**Phase 3（假设与测试）/ Phase 3 (Hypothesis & Testing)：**
+陈述假设 / 最小化测试 / 3次失败后进入架构质疑
+State hypothesis / Minimize test / Enter architecture questioning after 3 failures
+
+**Phase 4（修复验证）/ Phase 4 (Fix Verification)：**
+创建回归测试 / 修复根因 / 验证无回归 / 提交
+Create regression test / Fix root cause / Verify no regression / Commit
+
+**⚠️ 3次失败后 / After 3 failures：STOP → 与团队质疑架构 → 禁止继续打补丁 / STOP → Question architecture with team → Patching prohibited
+
+← 来源 / Source：ESD-MANDATORY-001 §L3-三十（从L3提升至L1，因其致命性 / Elevated from L3 to L1 due to critical nature）
+
+---
+
+## 第二部分：L2 标准 / Part II: L2 Standards
+
+### L2-001：模块划分 / Module Division
+
+**模块划分原则 / Module division principles：**
+
+- 按业务能力（Business Capability）划分，模块边界=DDD边界上下文 / Divided by Business Capability; module boundary = DDD Bounded Context
+- 粒度：一个模块包含 3-10 个强相关 API / Granularity: one module contains 3-10 strongly related APIs
+- 每个模块必须文档化 / Each module must document：职责 / API 清单 / 依赖 / 数据 Owner / SLA / Responsibilities / API List / Dependencies / Data Owner / SLA
+
+← 来源 / Source：ESD-MANDATORY-001 §L2-十二 + ECGS §0.3
+
+### L2-002：架构设计评审门槛 / Architecture Review Threshold
+
+**必须评审的情形 / Situations requiring review：**
+
+- 新增基础模块 / New foundation modules
+- 跨业务线调用关系变更 / Cross-business line call relationship changes
+- 引入新技术栈或中间件 / Introduction of new tech stack or middleware
+- 数据库选型变更 / Database selection changes
+- 安全策略变更 / Security policy changes
+
+**评审组成与时限 / Review composition and timeline：**
+ASG + 业务线技术负责人，7 工作日内结论
+ASG + Business Line Technical Lead, conclusion within 7 working days
+
+← 来源 / Source：ESD-MANDATORY-001 §L2-十一
+
+### L2-003：基础模块复用评估 / Foundation Module Reuse Evaluation
+
+**新增业务强制步骤 / Mandatory steps for new business：**
+
+- □ 账户能力：现有 UAM 能满足吗？/ Account capability: Can existing UAM meet requirements?
+- □ 安全能力：现有 SMS 能满足吗？/ Security capability: Can existing SMS meet requirements?
+- □ 支付能力：现有 PAY 能满足吗？/ Payment capability: Can existing PAY meet requirements?
+
+**自建判断 / Build-vs-reuse decision：**
+开发成本 > 复用成本 × 复用业务线数量 → 不值得复用
+Development cost > Reuse cost × Number of reusing business lines → Not worth reusing
+
+← 来源 / Source：ESD-MANDATORY-001 §L2-十三
+
+### L2-004：容错与韧性设计 / Fault Tolerance and Resilience Design
+
+**每个模块必须设计 / Each module must design：**
+
+- 超时控制（默认 30s）/ Timeout control (default 30s)
+- 重试（最多 3 次，指数退避）/ Retry (max 3 times, exponential backoff)
+- 熔断降级 / Circuit breaker degradation
+- 限流（超出处理能力时友好拒绝）/ Rate limiting (graceful rejection when exceeding capacity)
+
+**Circuit Breaker配置 / Circuit Breaker configuration：**
+滑动窗口10次/失败率阈值50%/半开状态3次调用
+Sliding window: 10 calls / Failure rate threshold: 50% / Half-open: 3 calls
+
+← 来源 / Source：ESD-MANDATORY-001 §L2-十四 + ECGS §2.5（SMS服务Circuit Breaker配置）
+
+### L2-005：可观测性设计 / Observability Design
+
+**每个模块必须定义 / Each module must define：**
+
+- **Metrics指标 / Metrics：** QPS / 错误率 / P99延迟 / 资源使用率 / QPS / Error Rate / P99 Latency / Resource Usage
+- **Tracing链路 / Tracing：** trace_id 从入口透传到出口 / trace_id passes through from entry to exit
+- **Logging日志 / Logging：** JSON格式，含 timestamp/trace_id/module/level/message / JSON format, including timestamp/trace_id/module/level/message
+  - 禁止日志中出现 / Prohibited in logs：密码 / Token / 密钥 / 手机号 / 身份证 / Password / Token / Secret / Phone / ID Number
+- **Health健康检查 / Health checks：** /healthz（存活）+ /readyz（就绪，含依赖检查）/ /healthz (liveness) + /readyz (readiness, including dependency check)
+
+← 来源 / Source：ESD-MANDATORY-001 §L2-十五
+
+### L2-006：技术选型 / Technology Stack
+
+**商业运营优先原则 / Commercial Operations Priority Principle：**
+架构设计时，优先选择经过大规模商业验证、生态成熟、技术文档完善、社区活跃的产品。技术选型应综合考虑团队技术储备、业务场景复杂度、系统规模、运维成本等因素。
+When designing architecture, prioritize products with large-scale commercial validation, mature ecosystem, comprehensive technical documentation, and active community. Technology selection should comprehensively consider team technical reserve, business scenario complexity, system scale, and operational costs.
+
+#### 后端框架（商业运营优先 / Backend Frameworks (Commercial Operations Priority)）
+
+| 优先级 / Priority | 框架 / Framework | 适用场景 / Use Cases | 说明 / Description |
+|------------------|------------------|----------------------|-------------------|
+| P0 | **Java Spring Boot** | 中大型商业系统、电商、金融、企业级应用 / Large commercial systems, e-commerce, finance, enterprise | 生态最成熟，社区庞大，适合复杂业务，高可维护性 / Most mature ecosystem, large community, suitable for complex business, high maintainability |
+| P1 | Go (Gin/Echo) | 高并发、微服务、实时系统 / High concurrency, microservices, real-time systems | 性能优异，适合高并发场景，学习曲线适中 / Excellent performance, suitable for high concurrency, moderate learning curve |
+| P2 | Python FastAPI | 快速原型、AI集成、数据服务 / Rapid prototyping, AI integration, data services | 异步高性能，适合AI场景，开发效率高 / Async high performance, suitable for AI scenarios, high development efficiency |
+| P3 | Node.js (NestJS) | 全栈团队、中小项目 / Full-stack teams, small-medium projects | 同构前端，统一语言，快速迭代 / Isomorphic frontend, unified language, rapid iteration |
+
+#### 前端框架（商业运营优先 / Frontend Frameworks (Commercial Operations Priority)）
+
+| 优先级 / Priority | 框架 / Framework | 适用场景 / Use Cases | 说明 / Description |
+|------------------|------------------|----------------------|-------------------|
+| P0 | **React + TypeScript** | 中大型商业系统、企业级应用 / Large commercial systems, enterprise apps | 生态最成熟，组件库丰富，适合复杂交互 / Most mature ecosystem, rich component library, suitable for complex interactions |
+| P1 | Vue 3 + TypeScript | 快速开发、SaaS产品 / Rapid development, SaaS products | 上手快，文档友好，适合中小型项目 / Fast learning, friendly docs, suitable for small-medium projects |
+| P2 | Next.js (React) | 全栈应用、SSR优先 / Full-stack apps, SSR priority | 同构渲染，SEO友好，适合内容型产品 / Isomorphic rendering, SEO-friendly, suitable for content products |
+| P3 | Angular | 超大型企业应用 / Super large enterprise apps | 完整解决方案，适合超大型团队 / Complete solution, suitable for super large teams |
+
+#### 数据库（商业运营优先 / Databases (Commercial Operations Priority)）
+
+| 优先级 / Priority | 数据库 / Database | 适用场景 / Use Cases | 说明 / Description |
+|------------------|------------------|----------------------|-------------------|
+| P0 | **PostgreSQL** | 核心业务数据、关系型存储 / Core business data, relational storage | 功能强大，扩展性好，PostGIS/JSONB支持，符合等保要求 / Powerful, scalable, PostGIS/JSONB support, meets security compliance |
+| P1 | MySQL | 互联网业务、读多写少 / Internet business, read-heavy | 互联网标配，主从复制成熟 / Internet standard, mature master-slave replication |
+| P2 | Redis | 缓存、会话、实时数据 / Cache, session, real-time data | 高性能，持久化支持，集群成熟 / High performance, persistence support, mature clustering |
+| P3 | MongoDB | 文档型数据、敏捷开发 / Document data, agile development | 灵活Schema，适合快速迭代 / Flexible schema, suitable for rapid iteration |
+
+#### 缓存与存储 / Cache and Storage
+
+| 组件 / Component | 选择 / Choice | 说明 / Description |
+|-----------------|---------------|-------------------|
+| 缓存 / Cache | Redis | 高性能缓存，Cluster模式，Pub/Sub支持 / High-performance cache, Cluster mode, Pub/Sub support |
+| 搜索引擎 / Search Engine | Elasticsearch | 全文检索，日志分析，Kibana可视化 / Full-text search, log analysis, Kibana visualization |
+| 对象存储 / Object Storage | MinIO / OSS / S3 | 私有部署选MinIO，云端选OSS/S3 / MinIO for on-prem, OSS/S3 for cloud |
+| 消息队列 / Message Queue | Kafka / RabbitMQ | Kafka高吞吐事件，RabbitMQ任务队列 / Kafka for high-throughput events, RabbitMQ for task queues |
+
+#### 运维与容器 / Operations & Containerization
+
+| 组件 / Component | 选择 / Choice | 说明 / Description |
+|-----------------|---------------|-------------------|
+| 容器化 / Containerization | Docker + Docker Compose | 环境一致性 / Environment consistency |
+| 编排 / Orchestration | Kubernetes | 生产级容器编排 / Production-grade container orchestration |
+| 反向代理 / Reverse Proxy | Nginx | 静态文件服务，反向代理 / Static file service, reverse proxy |
+| CI/CD | GitLab CI / Jenkins | 流水线自动化 / Pipeline automation |
+
+← 来源 / Source：ECPAS v2.0 §1.1 + 商业运营最佳实践 / Commercial Operations Best Practices
+
+### L2-007：数据库与存储选型 / Database & Storage Selection
+
+**选型原则 / Selection Principles：**
+商业运营系统优先选择经过大规模验证的数据库产品，PostgreSQL 作为默认首选。
+Commercial operation systems should prioritize database products with large-scale validation; PostgreSQL is the default first choice.
+
+| 类型 / Type | 首选 / Primary | 备选 / Alternative | 说明 / Description |
+|------------|----------------|-------------------|-------------------|
+| 关系型 / Relational | **PostgreSQL** | MySQL / MariaDB | ACID事务，JSONB支持，符合等保要求 / ACID transactions, JSONB support, meets security compliance |
+| 分析型 / Analytical | ClickHouse / StarRocks | PostgreSQL FDW | 实时OLAP，高压缩比 / Real-time OLAP, high compression |
+| 缓存 / Cache | Redis Cluster | Memcached | 持久化支持，Cluster模式成熟 / Persistence support, mature Cluster mode |
+| 搜索 / Search | Elasticsearch | Meilisearch | 全文检索，聚合分析 / Full-text search, aggregations |
+| 向量 / Vector | pgvector / Milvus | Qdrant | AI向量检索场景 / AI vector search scenarios |
+| 时序 / Time-series | TimescaleDB / InfluxDB | PostgreSQL | IoT/监控数据 / IoT/monitoring data |
+| 对象存储 / Object Storage | MinIO | OSS / S3 / COS | 私有部署优先 / On-prem priority |
+
+← 来源 / Source：ECPAS v2.0 §2 + 商业运营最佳实践 / Commercial Operations Best Practices
+
+### L2-008：API设计 / API Design
+
+**API设计规范 / API design standards：**
+
+- URL 版本化 / URL versioning：/v1/ /v2/
+- 废弃提前 6 个月通知，过渡期 6 个月 / Deprecation requires 6 months notice, 6-month transition period
+- 响应头 / Response headers：X-API-Version / X-Request-Id / X-RateLimit-Remaining
+- 错误码规范 / Error code specification：{ code: 0成功/success, >0业务错误/business error, <0系统错误/system error }
+
+← 来源 / Source：ESD-MANDATORY-001 §L2-十六 + ECPAS v2.0 §3.1
+
+### L2-009：等保二级技术要求（30项强制接入）/ Equal Protection Level-2 Technical Requirements (30 Mandatory Items)
+
+**【身份鉴别】（8项）/ Identity Authentication (8 items)**
+
+- □ 强壮密码策略（大小写+数字+特殊字符，≥8位）/ Strong password policy (upper+lower+number+special, ≥8 chars)
+- □ 多因素认证支持（MFA/OTP/生物识别）/ Multi-factor authentication support (MFA/OTP/biometrics)
+- □ 每个用户唯一标识（user_id）/ Each user has unique identifier (user_id)
+- □ 禁止共享账号 / Shared accounts prohibited
+- □ 密码 Argon2id/bcrypt 存储 / Passwords stored with Argon2id/bcrypt
+- □ 登录失败锁定（5次失败锁5分钟）/ Login failure lockout (5 failures = 5 min)
+- □ 会话超时登出（≤30分钟idle）/ Session timeout logout (≤30 min idle)
+- □ 审计日志记录登录行为 / Audit logs record login behavior
+
+**【访问控制】（6项）/ Access Control (6 items)**
+
+- □ 最小权限（RBAC/ABAC）/ Least privilege (RBAC/ABAC)
+- □ 管理员权限分离（不用root运行服务）/ Admin privilege separation (don't run services as root)
+- □ 敏感操作二次确认 / Sensitive operations require second confirmation
+- □ 禁止访问控制权限篡改 / Access control tampering prohibited
+- □ 账户分配遵循最小权限 / Account assignment follows least privilege
+- □ 定期审查账户权限（≥90天）/ Periodic account permission review (≥90 days)
+
+**【安全审计】（5项）/ Security Audit (5 items)**
+
+- □ 记录所有状态变更操作 / Record all state-changing operations
+- □ 审计日志不可删除（append-only）/ Audit logs non-deletable (append-only)
+- □ 日志保留≥180天 / Log retention ≥180 days
+- □ 日志防篡改（哈希链）/ Log tamper-proofing (hash chain)
+- □ 审计记录含：时间/用户/操作/结果/客户端IP / Audit records include: time/user/operation/result/client IP
+
+**【数据保护】（6项）/ Data Protection (6 items)**
+
+- □ TLS 1.2+ 传输加密 / TLS 1.2+ transmission encryption
+- □ ChaCha20-Poly1305/AES-256 存储加密 / ChaCha20-Poly1305/AES-256 storage encryption
+- □ 敏感数据脱敏展示 / Sensitive data masking in display
+- □ 重要数据备份（≥每日增量，≥每周全量）/ Important data backup (≥daily incremental, ≥weekly full)
+- □ 远程数据销毁能力 / Remote data destruction capability
+- □ 数据删除记录审计日志 / Data deletion recorded in audit log
+
+**【网络保护】（5项）/ Network Protection (5 items)**
+
+- □ HTTPS 全站强制 / HTTPS enforced site-wide
+- □ 安全响应头完整（CSP/X-Frame-Options/HSTS）/ Complete security response headers (CSP/X-Frame-Options/HSTS)
+- □ 接口限速防 DDoS / API rate limiting for DDoS protection
+- □ 网络边界防火墙隔离 / Network boundary firewall isolation
+- □ 无线网络 WPA2/WPA3 / Wireless network WPA2/WPA3
+
+**【主机保护】（6项）/ Host Protection (6 items)**
+
+- □ 非root用户运行 / Run as non-root user
+- □ 最小系统调用过滤 / Minimal system call filtering
+- □ 独立数据目录权限（chmod 700）/ Isolated data directory permissions (chmod 700)
+- □ 系统安全补丁≤7天更新 / System security patches ≤7 days
+- □ 禁止开放不必要端口 / Unnecessary ports must not be open
+- □ 日志集中收集分析 / Centralized log collection and analysis
+
+← 来源 / Source：ESD-MANDATORY-001 §L2-十八
+
+---
+
+## 第三部分：L3 规则 / Part III: L3 Rules
+
+### L3-001：编码通用原则 / General Coding Principles
+
+**编码基本规则 / Basic coding rules：**
+
+- 命名即注释：变量/函数名必须自解释 / Naming is documentation: variable/function names must be self-explanatory
+- 单一职责：每个函数只做一件事 / Single responsibility: each function does one thing
+- 异常处理：永远不吞异常（至少记录日志）/ Exception handling: never swallow exceptions (at least log them)
+- 硬编码禁止：配置外置，禁止魔法数字 / No hardcoding: externalize configuration, no magic numbers
+- 资源释放：finally/defer 中释放 / Resource release: in finally/defer blocks
+- 边界检查：外部输入必须校验（类型/长度/范围）/ Boundary checking: external input must be validated (type/length/range)
+- 日志规范：INFO记录流程，WARN记录可恢复异常，ERROR记录故障 / Logging: INFO for flow, WARN for recoverable exceptions, ERROR for failures
+
+← 来源 / Source：ESD-MANDATORY-001 §L3-二十
+
+### L3-002：多语言编码规范 / Multi-Language Coding Standards
+
+**【Go / Golang】（Uber Go规范 / Uber Go规范）**
+
+- □ 永远不忽略 error / Never ignore error
+- □ 每个函数传递 context.Context / Pass context.Context to every function
+- □ 依赖注入通过 wire / Dependency injection via wire
+- □ golangci-lint 必须通过 / golangci-lint must pass
+
+**【Python / Python】（PEP 8 + Black + mypy）**
+
+- □ 所有函数有 Type Hints / All functions have Type Hints
+- □ Black 格式化 / Black formatting
+- □ flake8 + mypy 必须通过 / flake8 + mypy must pass
+
+**【TypeScript / TypeScript】（Airbnb + TypeScript）**
+
+- □ 强制 TypeScript，禁止 any / TypeScript mandatory, any prohibited
+- □ async/await，禁止 Promise 嵌套 / async/await, Promise nesting prohibited
+- □ ESLint + Prettier 必须通过 / ESLint + Prettier must pass
+
+**【Java / Java】（Alibaba Java规范 / Alibaba Java规范）**
+
+- □ 线程安全集合优先 / Thread-safe collections preferred
+- □ Lint 必须通过 / Lint must pass
+
+**【Swift / Kotlin】**
+
+- □ 官方编码规范 / Official coding standards
+- □ 值类型优先 / 禁止 !! / 协程异步 / Value types preferred / !! prohibited / Coroutine async
+
+← 来源 / Source：ESD-MANDATORY-001 §L3-二十一
+
+### L3-003：安全编码 / Secure Coding
+
+**安全编码规范 / Secure coding standards：**
+
+- ✅ 参数化查询 / ORM / Parameterized queries / ORM
+- ❌ 禁止字符串拼接 SQL / eval() / shell=True+用户输入拼接 / String-concatenated SQL / eval() / shell=True+user input prohibited
+- ✅ 模板引擎默认转义 / React 默认防护 / Template engine default escaping / React default protection
+- ❌ 禁止在日志中记录密码/Token/密钥 / Password/Token/Secret in logs prohibited
+- ❌ 禁止在 Git 中提交密钥 / Secrets committed to Git prohibited
+- ❌ 禁止在 URL 参数中传递敏感数据 / Sensitive data in URL parameters prohibited
+
+← 来源 / Source：ESD-MANDATORY-001 §L3-二十二
+
+### L3-004：Git工作流 / Git Workflow
+
+**分支命名 / Branch naming：**
+
+- master / develop（受保护 / protected）
+- feature/{issue-id}-{short-desc}
+- fix/{issue-id}-{short-desc}
+- release/v{version}
+- hotfix/{issue-id}-{short-desc}
+
+**Commit格式 / Commit format：** <type>(<scope>): <subject>
+
+| type | 中文 / Chinese | English |
+|------|----------------|---------|
+| feat | 新功能 | New feature |
+| fix | 修复bug | Bug fix |
+| docs | 文档更新 | Documentation update |
+| style | 格式调整 | Formatting change |
+| refactor | 重构 | Refactoring |
+| test | 测试 | Testing |
+| chore | 依赖/构建 | Dependencies/Build |
+
+**CHANGELOG强制 / CHANGELOG mandatory：**
+每次 PR/Merge 前，最新条目必须包含 Contributor Identity
+Before each PR/Merge, latest entry must include Contributor Identity
+
+← 来源 / Source：ESD-MANDATORY-001 §L3-二十六 + SYS-001
+
+### L3-005：TDD红绿重构循环 / TDD Red-Green-Refactor Cycle
+
+**TDD三阶段 / TDD three phases：**
+
+- **RED（红）**：写失败测试（明确要实现的功能）→ git commit "test: ..." / Write failing test (clarify function to implement) → git commit "test: ..."
+- **GREEN（绿）**：写最小代码通过 → git commit "feat: ..." / Write minimum code to pass → git commit "feat: ..."
+- **REFACTOR（重构）**：改善代码结构 → git commit "refactor: ..." / Improve code structure → git commit "refactor: ..."
+
+**约束 / Constraints：**
+- ① 不跳步（不先写代码再补测试）/ No skipping (don't write code then add tests)
+- ② 不在 RED 时写多余测试 / Don't write extra tests during RED
+- ③ 不在 GREEN 时重构 / Don't refactor during GREEN
+
+← 来源 / Source：ESD-MANDATORY-001 §L3-二十九
+
+### L3-006：测试金字塔 / Testing Pyramid
+
+**测试分层 / Testing layers：**
+
+- **单元测试（底层，大量）/ Unit tests (bottom, many)**：≥80% 覆盖率，CI 门控 / ≥80% coverage, CI gate
+- **集成测试（中层，中等）/ Integration tests (middle, moderate)**：API 交互测试 / API interaction tests
+- **端到端测试（顶层，少量）/ E2E tests (top, few)**：核心路径 100% 覆盖 / Core paths 100% coverage
+
+← 来源 / Source：ESD-MANDATORY-001 §L3-二十八
+
+### L3-007：灰度与回滚 / Gradual Release and Rollback
+
+**灰度条件（进入下一阶段）/ Gradual conditions (advance to next stage)：**
+
+- ✅ 错误率 < 0.1% / Error rate < 0.1%
+- ✅ P99 < 基准 × 1.2 / P99 < baseline × 1.2
+- ✅ 无 P0/P1 告警 / No P0/P1 alerts
+
+**自动回滚触发 / Auto-rollback triggers：**
+错误率 > 1% 或 P99 > 500ms 或任意 P0 / Error rate > 1% or P99 > 500ms or any P0
+
+**回滚操作 / Rollback operation：**
+kubectl rollout undo deployment/{name}（15 分钟内 / within 15 minutes）
+
+← 来源 / Source：ESD-MANDATORY-001 §L4-三十二
+
+### L3-008：CI五阶段门控 / CI Five-Stage Gate
+
+**CI流水线五阶段 / CI pipeline five stages：**
+
+- **Stage 1**：Lint + 类型检查 + 循环依赖检测 / Lint + Type check + Circular dependency detection
+- **Stage 2**：单元测试（≥80%）+ 集成测试 / Unit tests (≥80%) + Integration tests
+- **Stage 3**：SAST + 依赖漏洞扫描 + Secret 检测（High/Critical 漏洞 → Pipeline 失败）/ SAST + Dependency vulnerability scan + Secret detection (High/Critical → Pipeline failure)
+- **Stage 4**：Docker 镜像构建 + 推送仓库 / Docker image build + Push to registry
+- **Stage 5**：部署测试 + 自动化验收 + 部署 staging / Deploy test + Automated acceptance + Deploy to staging
+
+**禁止事项 / Prohibitions：**
+- ❌ 禁止跳过任何 Stage / Skipping any Stage prohibited
+- ❌ 禁止手动修改 CI 配置绕过检查 / Manually modifying CI config to bypass checks prohibited
+
+← 来源 / Source：ESD-MANDATORY-001 §L4-三十三
+
+### L3-009：代码注释规范 / Code Commenting Standards
+
+**【必须注释的情况 / Required comment situations】**
+
+- 文件头（每个源文件必须包含）/ File header (required in every source file)
+- 导出函数（所有 public 函数必须包含 JSDoc/DocString）/ Exported functions (all public functions require JSDoc/DocString)
+- 复杂业务逻辑（超过3层嵌套/关键算法/状态机/边界条件）/ Complex business logic (>3 nested layers/key algorithms/state machines/boundary conditions)
+- 常量/枚举（含单位说明）/ Constants/enums (include unit descriptions)
+
+**【禁止注释 / Prohibited comments】**
+
+- ❌ 显而易见的行为（如：i += 1 # i自增）/ Obvious behavior (e.g., i += 1 # i increment)
+- ❌ 与代码矛盾的注释（发现时立即修复）/ Comments contradicting code (fix immediately when discovered)
+
+**【TODO注释格式 / TODO comment format】**
+
+- // TODO(author): {描述} + issue编号 / // TODO(author): {description} + issue number
+
+← 来源 / Source：ESD-MANDATORY-001 §L3-二十三
+
+### L3-010：API端点注释 / API Endpoint Documentation
+
+**所有 API 端点必须包含 OpenAPI 3.0 注解 / All API endpoints must include OpenAPI 3.0 annotations：**
+
+```typescript
+/**
+ * @summary 用户注册 / User Registration
+ * @param {object} body - 注册请求体 / Registration request body
+ * @param {string} body.username - 用户名（3-64字符）/ Username (3-64 characters)
+ * @param {string} body.password - 密码（8位以上）/ Password (8+ characters)
+ * @returns {object} { code: 0, data: { user_id } }
+ * @throws {400} 参数校验失败 / Parameter validation failed
+ * @throws {409} 用户名已存在 / Username already exists
+ */
+POST /uam/v1/accounts/register
+```
+
+← 来源 / Source：ESD-MANDATORY-001 §L3-二十四
+
+---
+
+## 第四部分：L4 规范 / Part IV: L4 Specifications
+
+### L4-001：Kubernetes加固 / Kubernetes Hardening
+
+**系统加固（必须全部启用）/ System hardening (all must be enabled)：**
+
+- User/Group：非root用户 / Non-root user
+- NoNewPrivileges：true
+- ProtectSystem：strict
+- ProtectHome：true
+- PrivateTmp：true
+- SystemCallFilter：@system-service
+- ReadOnlyRootFilesystem：true（如可行 / if feasible）
+- ResourceQuota：设置 CPU/内存上限 / Set CPU/memory limits
+
+**健康检查 / Health checks：**
+
+- Liveness：/healthz（失败重启 / failure restarts）
+- Readiness：/readyz（失败停止流量 / failure stops traffic）
+
+← 来源 / Source：ESD-MANDATORY-001 §L4-三十四
+
+### L4-002：监控四大支柱 / Four Pillars of Monitoring
+
+**四大监控支柱 / Four pillars of monitoring：**
+
+- **Metrics（Prometheus）**：QPS / 错误率 / P50,P90,P99 / CPU / 内存 / QPS / Error rate / P50,P90,P99 / CPU / Memory
+- **Tracing（Jaeger）**：trace_id 全链路透传 / trace_id full-chain passthrough
+- **Logging（Fluentd→Kafka/ES）**：JSON格式，保留≥30天（审计≥180天）/ JSON format, retention ≥30 days (audit ≥180 days)
+- **Health（/healthz + /readyz）**：存活 + 就绪（含依赖检查）/ Liveness + Readiness (including dependency check)
+
+← 来源 / Source：ESD-MANDATORY-001 §L4-三十五
+
+### L4-003：告警分级 / Alert Severity Classification
+
+**告警分级定义 / Alert severity definitions：**
+
+- **P0 紧急（立即处理）/ P0 Critical (immediate action)**：服务不可用 / 核心功能故障 → 电话+短信+IM / Service down / Core function failure → Phone+SMS+IM
+- **P1 高优（15分钟）/ P1 High (15 min)**：错误率>1% / P99>500ms → IM+电话 / Error rate>1% / P99>500ms → IM+Phone
+- **P2 中优（当天）/ P2 Medium (same day)**：错误率>0.5% / P99>300ms → IM / Error rate>0.5% / P99>300ms → IM
+- **P3 低优（3天）/ P3 Low (3 days)**：一般告警 → IM / General alert → IM
+
+← 来源 / Source：ESD-MANDATORY-001 §L4-三十六
+
+### L4-004：SLA计算 / SLA Calculation
+
+**SLA计算公式 / SLA calculation formula：**
+可用性 = (总时间-不可用时间)/总时间 / Availability = (Total time - Downtime) / Total time
+
+**常见SLA目标 / Common SLA targets：**
+
+| SLA | 年不可用时间 / Annual Downtime |
+|-----|-------------------------------|
+| 99.9% | <8.7小时 / hours |
+| 99.95% | <4.4小时 / hours |
+| 99.99% | <53分钟 / minutes |
+
+**告警与错误预算 / Alerting and error budget：**
+- 告警阈值 = SLA目标×0.8 / Alert threshold = SLA target × 0.8
+- 错误预算消耗>50% → 冻结非关键发布 / Error budget consumed >50% → Freeze non-critical releases
+- 错误预算消耗>100% → 立即止损 / Error budget consumed >100% → Immediate止损
+
+← 来源 / Source：ESD-MANDATORY-001 §L4-三十八
+
+### L4-005：结构化日志 / Structured Logging
+
+**结构化日志规范 / Structured logging standards：**
+
+- 格式 / Format：JSON（结构化 / structured）
+- 必须字段 / Required fields：timestamp / level / trace_id / module / message
+- 禁止记录 / Prohibited in logs：密码 / Token / 密钥 / 手机号 / 身份证（信用卡号/CVV）/ Password / Token / Secret / Phone / ID (Credit Card/CVV)
+- 错误日志必须包含 / Error logs must include：WHAT + WHERE + WHEN + CONTEXT（trace_id / user_id / 脱敏参数 / trace_id / user_id / masked parameters）
+
+← 来源 / Source：ESD-MANDATORY-001 §L4-三十七
+
+### L4-006：Saga分布式事务 / Saga Distributed Transaction Pattern
+
+**Saga模式说明 / Saga pattern description：**
+使用 Saga 模式处理跨服务分布式事务（编排式或编排器式）
+Use Saga pattern for cross-service distributed transactions (choreography or orchestration)
+
+**补偿事务设计原则 / Compensating transaction design principles：**
+
+- 补偿操作必须确定性（可重试）/ Compensating operations must be deterministic (retryable)
+- 补偿顺序与原顺序相反 / Compensation order is reverse of original order
+- 每个步骤必须有超时机制 / Each step must have timeout mechanism
+- 每个步骤和补偿都必须幂等 / Each step and compensation must be idempotent
+
+← 来源 / Source：ECGS §2.4（PAY服务Saga设计 / PAY Service Saga Design）
+
+### L4-007：CQRS读写分离 / CQRS Read-Write Separation
+
+**CQRS命令与查询分离 / CQRS command and query separation：**
+
+- **命令端（写）/ Command side (write)**：RegisterAccount, Login, UpdateProfile, BindThirdParty
+- **查询端（读）/ Query side (read)**：QueryAccountById, QuerySessionsByAccountId
+- **Event Sourcing / 事件溯源**：AccountCreatedEvent, AccountUpdatedEvent, PasswordChangedEvent
+
+← 来源 / Source：ECGS §2.3（UAM服务CQRS设计 / UAM Service CQRS Design）
+
+### L4-008：发布流程 / Release Process
+
+**发布流程时间表 / Release process timeline：**
+
+- **T-2 天 / T-2 days**：代码冻结 + CI 全部通过 / Code freeze + All CI passed
+- **T-1 天 / T-1 day**：建 release 分支 + PR 审核（≥2人）+ 合并 master + CI/CD 部署 staging / Create release branch + PR review (≥2) + Merge master + CI/CD deploy to staging
+- **发布 / Release**：灰度 10% → 30% → 50% → 100%（每阶段观察 ≥10 分钟 / each stage observe ≥10 min）
+- **发布后 / Post-release**：30 分钟高频监控 + 通知 + 更新 CHANGELOG / 30 min high-frequency monitoring + notification + CHANGELOG update
+
+← 来源 / Source：ESD-MANDATORY-001 §L4-三十一
+
+---
+
+## 第五部分：L5 推荐 / Part V: L5 Recommended Practices
+
+### L5-001：数据建模 / Data Modeling
+
+**数据建模原则 / Data modeling principles：**
+
+- 按 DDD 领域建模，每个聚合根（Aggregate Root）维护一致性边界 / Model by DDD domains; each Aggregate Root maintains consistency boundary
+- 每个模块独立数据存储（Database per Service）/ Each module has independent data storage (Database per Service)
+- 使用事件总线实现跨模块数据共享 / Use event bus for cross-module data sharing
+
+← 来源 / Source：ECGS §0.3（架构模式参考 / Architecture Pattern Reference）
+
+### L5-002：事件风暴 / Event Storming
+
+**事件风暴说明 / Event storming description：**
+
+- 使用事件风暴进行领域建模：领域事件→命令→聚合→限界上下文 / Use event storming for domain modeling: Domain events → Commands → Aggregates → Bounded Contexts
+- 支持快速识别业务边界和关键流程 / Supports rapid identification of business boundaries and key processes
+
+← 来源 / Source：ECGS §0.3（架构模式参考 / Architecture Pattern Reference）
+
+### L5-003：等保三级增强 / Equal Protection Level-3 Enhanced Requirements
+
+**相比二级额外要求 / Additional requirements beyond Level-2：**
+
+**【身份鉴别+】/ Identity Authentication+】**
+双重因素强制 / 登录异常检测 / 生物识别第二因素 / 重要操作二次认证
+Dual factor mandatory / Login anomaly detection / Biometric second factor / Important operation second confirmation
+
+**【访问控制+】/ Access Control+】**
+三权分立（系统管理员/安全管理员/审计管理员）/ 强制访问控制（MAC）
+Three-power separation (System Admin/Security Admin/Audit Admin) / Mandatory Access Control (MAC)
+
+**【安全审计+】/ Security Audit+】**
+实时监控告警 / 关联分析 / 年度第三方审计
+Real-time monitoring alerts / Correlation analysis / Annual third-party audit
+
+**【数据保护+】/ Data Protection+】**
+数据分类分级 / 核心数据不出境 / KMS/HSM密钥管理 / 数据水印
+Data classification / Core data not leaving borders / KMS/HSM key management / Data watermarking
+
+**【网络保护+】/ Network Protection+】**
+WAF抗APT / IDS入侵检测 / DMZ分区隔离
+WAF against APT / IDS intrusion detection / DMZ zone isolation
+
+**【入侵防范+】/ Intrusion Prevention+】**
+IDS / 半年度自动化渗透 / ≤24小时0day响应
+IDS / Semi-annual automated penetration / ≤24 hour 0day response
+
+← 来源 / Source：ESD-MANDATORY-001 §L2-十九
+
+### L5-004：等保定级预测 / Equal Protection Level Prediction
+
+**定级三要素 / Three elements for level determination：**
+
+- **受侵害客体 / Object of Harm**：公民合法权益→Level 1 / Citizens' legitimate rights → Level 1；社会秩序/公共利益→Level 2 / Social order/public interest → Level 2；国家安全→Level 3+ / National security → Level 3+
+- **侵害程度 / Degree of Harm**：造成一定影响→Level 1 / Some impact → Level 1；造成较大影响→Level 2 / Significant impact → Level 2；造成严重/特别严重影响→Level 3+ / Severe/special severe impact → Level 3+
+
+**典型定级 / Typical classifications：**
+- Level 1：企业内部资讯系统、工具类应用 / Internal enterprise info systems, tool apps
+- Level 2：用户管理系统、API密钥管理系统（本文档默认目标）/ User management system, API key management (default target of this document)
+- Level 3：支付系统、核心交易平台 / Payment systems, core trading platforms
+
+**定级流程 / Classification process：**
+识别客体→评估程度→确定等级→编写报告→专家评审（Level 2+）
+Identify object → Assess degree → Determine level → Write report → Expert review (Level 2+)
+
+← 来源 / Source：ESD-MANDATORY-001 §L2-十七
+
+---
+
+## 第六部分：L6 参考 / Part VI: L6 Reference
+
+### L6-001：术语表 / Glossary
+
+| 中文 / Chinese | English | 说明 / Description |
+|----------------|---------|-------------------|
+| 领域驱动设计 | DDD (Domain-Driven Design) | 强调业务领域建模和边界划分 / Emphasizes business domain modeling and boundary definition |
+| 限界上下文 | Bounded Context | DDD中的领域边界，每个BC有独立领域模型 / Domain boundary in DDD; each BC has independent domain model |
+| 聚合根 | Aggregate Root | 聚合内唯一入口，维护一致性边界 / Sole entry point in aggregate; maintains consistency boundary |
+| Saga | Saga | 分布式事务模式，通过本地事务+补偿实现跨服务一致 / Distributed transaction pattern; achieves cross-service consistency via local transactions + compensation |
+| 命令查询职责分离 | CQRS (Command Query Responsibility Separation) | 写入和读取使用不同模型 / Write and read use different models |
+| 事件溯源 | Event Sourcing | 存储状态变更事件而非最终状态 / Store state change events instead of final state |
+| 断路器 | Circuit Breaker | 故障时快速失败，防止级联故障 / Fail fast on failure; prevent cascading failures |
+| 后端专属前端 | BFF (Backends for Frontends) | 为不同前端提供定制API的架构模式 / Architecture pattern providing customized APIs for different frontends |
+| 服务网格 | Service Mesh | Sidecar代理实现mTLS/流量管理 / Sidecar proxy implements mTLS/traffic management |
+| 每服务数据库 | Database per Service | 每个微服务拥有独立数据库 / Each microservice has independent database |
+| RED指标 | RED Metrics | Rate/Errors/Duration服务层监控指标 / Service-level monitoring metrics |
+| USE指标 | USE Metrics | Utilization/Saturation/Errors资源层监控指标 / Resource-level monitoring metrics |
+| 架构决策记录 | ADR (Architecture Decision Records) | 记录重要架构决策的背景、决策和后果 / Records background, decisions, and consequences of important architectural decisions |
+| 恒等性 | Idempotency | 同一操作多次执行结果一致 / Same result regardless of how many times executed |
+| 死信队列 | DLQ (Dead Letter Queue) | 失败消息的存储队列 / Storage queue for failed messages |
+
+← 来源 / Source：ECGS §1.1+1.2（术语定义表 / Terminology Definition Table）
+
+### L6-002：AI服务商清单（24家）/ AI Service Provider List
+
+| 服务商 / Provider | 必填字段 / Required Fields | 官方文档 / Official Documentation |
+|-----------------|--------------------------|----------------------------------|
+| OpenAI | api_key, organization | platform.openai.com |
+| Anthropic | api_key | anthropic.com |
+| 阿里云百炼 / Alibaba Cloud Bailian | api_key, base_url | bailian.console.aliyun.com |
+| DeepSeek | api_key, base_url | platform.deepseek.com |
+| Groq | api_key, base_url | console.groq.com |
+| HuggingFace | api_key | huggingface.co |
+| Azure OpenAI | api_key, base_url, api_version | azure.microsoft.com |
+| Cohere | api_key | cohere.com |
+| AI21 Labs | api_key | ai21.com |
+| Stability AI | api_key | stability.ai |
+| Zhipu AI | api_key | open.bigmodel.cn |
+| Moonshot AI | api_key, base_url | platform.moonshot.cn |
+| 01.AI | api_key, base_url | platform.01.ai |
+| StepFun AI | api_key | stepfun.com |
+| IBM watsonx | api_key, base_url, project_id | ibm.com/watsonx |
+| Replicate | api_key | replicate.com |
+| RunPod | api_key, base_url | runpod.io |
+| Modal | api_key | modal.com |
+| Together AI | api_key | together.ai |
+| Perplexity | api_key | perplexity.ai |
+| Lepton AI | api_key, base_url | lepton.ai |
+| Vercel AI | api_key | vercel.com/ai |
+| Meta AI | api_key | ai.meta.com |
+| Mistral AI | api_key | mistral.ai |
+| OpenRouter | api_key, base_url | openrouter.ai |
+
+← 来源 / Source：ECPAS v2.0 §五
+
+### L6-003：16类基础服务能力矩阵 / 16 Foundation Services Capability Matrix
+
+#### 第一梯队 — 必须建设 / Tier 1 — MUST Build
+
+**A. UAM — 用户与账户服务 / User & Account Service**
+能力 / Capabilities：账户注册/登录/会话Token/SSO/MFA/第三方OAuth/设备指纹
+Account register/login/session Token/SSO/MFA/third-party OAuth/device fingerprint
+
+**B. PAY — 支付与交易服务 / Payment & Transaction Service**
+能力 / Capabilities：微信支付/支付宝/银联云闪付/数字人民币/PayPal/Stripe
+WeChat Pay/Alipay/UnionPay QuickPass/Digital RMB/PayPal/Stripe
+
+**C. SMS — 安全与合规服务 / Security & Compliance Service**
+能力 / Capabilities：MFA多因素认证/RBAC权限管理/欺诈检测/审计日志/PCI-DSS合规
+MFA/RBAC permission management/fraud detection/audit logs/PCI-DSS compliance
+
+**D. CFG — 配置与开关服务 / Configuration & Switch Service**
+能力 / Capabilities：多环境配置/命名空间隔离/版本管理/灰度发布/实时推送/敏感加密
+Multi-environment config/namespace isolation/version management/gradual release/realtime push/sensitive encryption
+
+#### 第二梯队 — 尽快建设 / Tier 2 — SHOULD Build
+
+**E. NTF — 消息通知服务 / Notification Service**
+能力 / Capabilities：短信/邮件/APP推送/站内信/模板管理/频率控制/智能路由
+SMS/email/app push/in-app message/template management/rate control/smart routing
+
+**F. DAT — 数据采集服务 / Data Acquisition Service**
+能力 / Capabilities：前端SDK/后端SDK/App SDK/事件模型/数据校验/实时监控
+Frontend SDK/backend SDK/app SDK/event model/data validation/realtime monitoring
+
+**G. MED — 媒体处理服务 / Media Processing Service**
+能力 / Capabilities：断点续传/图片处理（缩略/水印/格式转换）/视频转码/存储
+Resumable upload/image processing (thumbnail/watermark/format conversion)/video transcoding/storage
+
+**H. MKT — 营销优惠服务 / Marketing & Promotion Service**
+能力 / Capabilities：优惠券/满减/折扣/叠加计算/预算管控/库存管理/活动管理
+Coupons/quantity discounts/discounts/stacking calculation/budget control/inventory management/campaign management
+
+**I. PIM — 积分会员服务 / Points & Membership Service**
+能力 / Capabilities：积分账户/积分获取/积分消耗/会员等级/成长值/积分商城
+Points account/points earning/points redemption/membership level/growth value/points mall
+
+#### 第三梯队 — 按需建设 / Tier 3 — MAY Build
+
+**J. MOD — 内容审核服务 / Content Moderation Service**
+能力 / Capabilities：文本审核/图片审核/视频审核/违禁内容检测/精准率/召回率模式
+Text moderation/image moderation/video moderation/prohibited content detection/precision/recall modes
+
+**K. GMG — 用户增长服务 / Growth & Marketing Service**
+能力 / Capabilities：邀请码/裂变/拼团/任务系统/A/B测试/防刷风控
+Invite code/fission/team purchase/task system/A/B testing/anti-fraud risk control
+
+**L. CSC — 客服工单服务 / Customer Service Ticket Service**
+能力 / Capabilities：工单创建/处理/关闭/评价/FAQ问答/知识库/数据分析
+Ticket create/process/close/rate/FAQ Q&A/knowledge base/data analysis
+
+**M. SRS — 搜索推荐服务 / Search & Recommendation Service**
+能力 / Capabilities：全文检索/语义搜索/高亮/纠错/个性化推荐/协同过滤
+Full-text search/semantic search/highlight/correction/personalized recommendation/collaborative filtering
+
+**N. CDN — 内容分发服务 / Content Delivery Service**
+能力 / Capabilities：全球加速/HTTPS/防盗链/缓存策略/性能优化
+Global acceleration/HTTPS/anti-hotlink/cache strategy/performance optimization
+
+#### 第四梯队 — 长期规划 / Tier 4 — Long-term Planning
+
+**O. INS — 分析洞察服务 / Insights & Analytics Service**
+能力 / Capabilities：漏斗分析/留存分析/路径分析/归因分析/用户画像/报表看板
+Funnel analysis/retention analysis/path analysis/attribution analysis/user profiling/report dashboard
+
+**P. STR — 实时计算服务 / Streaming Service**
+能力 / Capabilities：实时ETL/实时指标/实时风控/流批一体/Flink
+Real-time ETL/real-time metrics/real-time risk control/unified stream-batch/Flink
+
+**Q. OPS — 运营效率服务 / Operations Efficiency Service**
+能力 / Capabilities：消息中心/弹窗管理/Banner管理/CMS内容管理/表单系统
+Message center/popup management/banner management/CMS content management/form system
+
+← 来源 / Source：ECGS §2.2 + 附录A完整能力矩阵 / Appendix A Complete Capability Matrix
+
+### L6-004：基础服务依赖关系矩阵 / Foundation Services Dependency Matrix
+
+| 被依赖\依赖 / Depended upon \ Depends on | UAM | PAY | SMS | NTF | MOD | CSC | MKT | PIM |
+|----------------------------------------|-----|-----|-----|-----|-----|-----|-----|-----|
+| UAM (用户账户 / User Account) | - | | ★★ | ★ | | | | ★ |
+| PAY (支付 / Payment) | ★★★ | - | ★★ | ★ | | ★ | ★★ | ★ |
+| SMS (安全 / Security) | ★★ | ★★ | - | ★ | | | ★ | |
+| NTF (消息通知 / Notification) | ★★ | ★ | | - | | ★ | ★ | ★ |
+| MOD (内容审核 / Moderation) | ★ | | ★ | | - | | | |
+| CSC (客服工单 / Customer Service) | ★★ | ★ | ★ | ★ | ★ | - | | ★ |
+| MKT (营销优惠 / Marketing) | ★★ | ★★ | | ★ | | | - | ★★★ |
+| PIM (积分会员 / Points & Membership) | ★★ | ★ | | ★ | | | ★★ | - |
+
+**核心依赖解读 / Core dependency interpretation：**
+
+1. UAM 是几乎所有服务的强依赖（用户身份是基础）/ UAM is a strong dependency for almost all services (user identity is fundamental)
+2. PAY 依赖 UAM 和 SMS（支付必须知道谁付、是否安全）/ PAY depends on UAM and SMS (payment must know who pays and if it's secure)
+3. MKT 和 PIM 互相强依赖（积分和优惠通常联动）/ MKT and PIM have strong mutual dependency (points and promotions usually linked)
+4. GMG 依赖多个服务（增长是综合能力体现）/ GMG depends on multiple services (growth is a comprehensive capability)
+
+← 来源 / Source：附录A §R
+
+### L6-005：技术实现建议 / Technology Implementation Recommendations
+
+**【自建 vs SaaS选型 / Build vs SaaS Selection】**
+
+**建议自建（复用价值高+数据敏感）/ Recommended for self-build (high reuse value + data sensitive)：**
+- UAM/PAY/SMS（数据必须自主可控 / Data must be self-controlled）
+- MKT/PIM/GMG（业务核心know-how / Core business know-how）
+- CFG（深度集成开关 / Deep integration switches）
+- DAT（数据资产 / Data assets）
+
+**可选SaaS（标准化程度高+接入成本低）/ Optional SaaS (high standardization + low integration cost)：**
+- NTF（短信通道可采购阿里云/腾讯云 / SMS channel can use Alibaba Cloud/Tencent Cloud）
+- MOD（内容审核可采购网易/数美 / Content moderation can use NetEase/Shumei）
+- MED（媒体处理可采购阿里云视频云 / Media processing can use Alibaba Cloud Video）
+- CDN（可采购阿里云CDN/腾讯云CDN / Can use Alibaba Cloud CDN/Tencent Cloud CDN）
+- CSC（可采购Zendesk/Udesk / Can use Zendesk/Udesk）
+
+**【技术栈建议 / Technology Stack Recommendations】**
+
+- 后端框架 / Backend framework：Go(高性能/high performance)/Java Spring Boot(成熟/mature)/Python FastAPI
+- 数据库 / Database：PostgreSQL(事务/transaction)/MySQL(业务/business)/Redis(缓存/cache)/ES(搜索/search)
+- 消息队列 / Message queue：Kafka(事件/events)/RabbitMQ(任务/tasks)
+- 缓存 / Cache：Redis Cluster
+- 搜索 / Search：Elasticsearch(全文/full-text)/Meilisearch(轻量/lightweight)
+- 文件存储 / File storage：MinIO(私有/on-prem)/OSS/S3
+- 实时计算 / Real-time computing：Flink/Storm
+- 报表 / Reporting：Apache Superset / Metabase
+
+← 来源 / Source：附录A §T
+
+---
+
+## 归档索引 / Archive Index
+
+> 以下源文档已整合至本统一标准 v2.1.0，旧版本标注为 **过时**。
+> The following source documents have been integrated into this unified standard v2.1.0; old versions are marked as **Obsolete**.
+
+| 原文件 / Original | 状态 / Status | 核心覆盖 / Coverage |
+|------------------|--------------|-------------------|
+| ESD-MANDATORY-001.md | ⛔ 过时 / Obsolete | L1~L4全部37条强制标准 / All 37 mandatory standards L1~L4 |
+| 企业产品研发全链路统一标准.md | ⛔ 过时 / Obsolete | UNI-MANDATORY-001 v1.0 |
+| Enterprise-Commerce-Golden-Standard.md | ⛔ 过时 / Obsolete | ECGS v1.1 16类基础服务 / 16 types of foundation services |
+| Enterprise-Commerce-Product-Architecture-Standard-v2.md | ⛔ 过时 / Obsolete | ECPAS v2.0 技术栈+AI Provider / Tech stack + AI Provider |
+| 附录A-商业化通用基础服务清单.md | ⛔ 过时 / Obsolete | 16类基础服务完整能力矩阵 / 16 types complete capability matrix |
+
+存放位置 / Storage location：`~/.archive/过时-*` / `~/.archive/obsolete-*`
+
+**当前有效版本 / Current valid version**：`/root/企业产品研发全链路统一标准v2.md`（UNI-MANDATORY-001 v2.1.0）
+
+---
+
+## 版本历史 / Version History
+
+| 版本 / Version | 日期 / Date | 说明 / Description |
+|---------------|------------|-------------------|
+| v1.0.0 | 2026-04-19 | 初始版本，整合ESD/ECGS/ECPAS为统一标准 / Initial version; integrated ESD/ECGS/ECPAS into unified standard |
+| v2.0.0 | 2026-04-19 | 整合5个源文档，保留全部核心内容：10条L1强制标准、30项等保技术要求、24家AI服务商、16类基础服务、TDD/CI规范 / Integrated 5 source documents; retained all core content: 10 L1 mandatory standards, 30 equal protection technical requirements, 24 AI providers, 16 foundation services, TDD/CI standards |
+| v2.0.1 | 2026-04-19 | 技术选型商业运营优先：后端Java Spring Boot P0、前端React P0、数据库PostgreSQL P0，补充完善各技术组件优先级 / Technology selection commercial operations priority: backend Java Spring Boot P0, frontend React P0, database PostgreSQL P0; supplemented technology component priorities |
+| v2.1.0 | 2026-04-19 | 完整中英文对照版本：所有标准条目100%中英双语、添加文档目录、统一标题格式"中文 / English"、修复表格格式、更新版本历史 / Complete bilingual version: All standards 100% Chinese-English bilingual, added table of contents, unified title format "Chinese / English", fixed table formatting, updated version history |
+
+---
+
+**文档结束 / End of Document**

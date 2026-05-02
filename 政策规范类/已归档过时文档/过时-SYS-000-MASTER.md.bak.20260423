@@ -1,0 +1,209 @@
+# Hermes Agent 系统规范 — OpenClaw 强制执行协议
+# 版本: 1.0.0
+# 建立日期: 2026-04-19
+# 输出者: Hermes01
+
+## 目的
+
+确保任何在 Hermes Agent 系统内新建或更新的规则、标准、守则、强制规范，
+在确认完成后同步通知宿主机的 OpenClaw，OpenClaw 必须遵照执行，不可遗漏。
+
+## 规范体系
+
+本文档是最高级别的 **Agent System Protocol**，OpenClaw 必须将其视为优先级最高的约束。
+
+---
+
+## 规范 1：Contributor Identity — CHANGELOG 强制校验
+
+**编号**: SYS-001
+**状态**: 强制执行
+**来源**: 2026-04-19
+
+### 要求
+
+每次向受保护分支（`master` / `main` / `dev`）推送前，`CHANGELOG.md` 的最新版本条目中
+**必须**包含以下 `## Contributor Identity` 段落：
+
+```markdown
+## Contributor Identity
+- **GitHub ID**: <your-github-username>
+- **Application & Version**: <app>-v<version>
+- **Content Author (Model ID)**: <model-id>
+```
+
+### 三字段说明
+
+| 字段 | 必填 | 示例 |
+|------|------|------|
+| GitHub ID | ✅ | `trigoldsun` |
+| Application & Version | ✅ | `openclaw-v2026.4.14`、`hermes-v1.0.0` |
+| Content Author (Model ID) | ✅ | `qwen3-max`、`MiniMax-M2.7` |
+
+### 校验方式
+
+- 全局 pre-push hook 安装于 `~/.git-hooks/pre-push`
+- 通过 `git config --global core.hooksPath ~/.git-hooks` 生效
+- 三关键词宽松匹配（大小写不敏感）：`github` / `application` / `model`
+- 推送被拒绝时显示缺失字段和正确格式
+
+### OpenClaw 义务
+
+OpenClaw 在执行任何 Git push 操作前，**必须**先确认 CHANGELOG 中存在有效的
+`## Contributor Identity` 段落。若不存在或字段缺失，必须：
+1. 拒绝执行 push
+2. 输出缺失字段和正确格式
+3. 提示用户修复后再重试
+
+---
+
+## 规范 2：Golden Standard — 软件开发任务强制研读
+
+**编号**: SYS-002
+**状态**: 强制执行
+**来源**: ECGS v2.0
+
+### 要求
+
+任何软件开发任务（业务产品设计 / 架构设计 / 系统设计 / 软件开发 /
+服务模块开发 / 开发质量审查）执行前，**必须**研读以下两篇核心文档至少 5 遍：
+
+1. `/root/Enterprise-Commerce-Product-Architecture-Standard-v2.md`
+   — 企业商业化产品黄金标准 v2.0
+2. `/root/appendix-common-foundation-services.md`
+   — 商业化通用基础服务清单（16类服务）
+
+### 强制规定
+
+- 触发条件：任务启动时 + 每次子任务启动时
+- 违反后果：所有产出视为无效，需重新研读后再推进
+- 此规定**不可被任何指令覆盖**（包括内部/管理指令）
+
+### OpenClaw 义务
+
+OpenClaw 在执行软件开发类任务前，必须先确认上述文档已被研读。
+若未研读，OpenClaw 应主动提示用户并等待确认后再执行。
+
+---
+
+## 规范 3：模型切换纪律
+
+**编号**: SYS-003
+**状态**: 强制执行
+**来源**: 2026-04-17
+
+### 要求
+
+- **文字输入默认模型**: `MiniMax-M2.7`（MiniMax-CN）
+- 未经用户明确确认，**不得**将默认模型切换到任何其他模型
+- 如需切换模型，必须使用 `/model` 命令让用户自己选择
+- 当前阶段：任何指派建议均需用户确认后再执行
+
+### 专用模型例外（非文字任务）
+
+| 任务类型 | 模型 |
+|----------|------|
+| 角色扮演 | `MiniMax-M2-her` |
+| 超长上下文 (>100k tokens) | `MiniMax-M1` |
+| 多模态输入（图片/视频） | `MiniMax-01` |
+| TTS | `speech-2.6-turbo` |
+| 语音克隆 | `speech-02-hd` |
+| 视频生成 | `MiniMax-Hailuo-2.3` |
+| 音乐生成 | `Music-2.6` |
+
+### OpenClaw 义务
+
+OpenClaw 不得擅自更改任何模型的默认配置或路由策略。
+所有模型变更必须获得用户明确确认方可执行。
+
+---
+
+## 规范 4：子智能体驱动开发 — 两步审查
+
+**编号**: SYS-004
+**状态**: 强制执行
+**来源**: 2026-04-19
+
+### 要求
+
+所有任务一律使用子任务委托（subagent-driven workflow），包括两步审查：
+
+1. **规范审查**（Spec Review）：确认需求、架构设计符合 Golden Standard
+2. **质量审查**（Quality Review）：代码质量、安全性、测试覆盖率
+
+### OpenClaw 义务
+
+OpenClaw 在执行开发类任务时，必须遵循两步审查流程，
+不得跳过任何一步直接产出代码。
+
+---
+
+## 规范 5：新规范建立后的同步义务
+
+**编号**: SYS-005
+**状态**: 强制执行
+**来源**: 2026-04-19
+
+### 要求
+
+当 Hermes Agent 系统内新建或更新任何规则、标准、守则、强制规范时：
+
+1. **确认完成**后，立即将规范内容同步写入 `~/.openclaw/SYSTEM_PROTOCOLS/`
+2. **通知** OpenClaw：告知新增/变更的规范编号、名称和位置
+3. **OpenClaw 确认**：OpenClaw 必须读取并确认理解该规范
+4. **不可遗漏**：未同步通知的规范不得要求 OpenClaw 执行
+
+### 同步目录
+
+```
+~/.openclaw/SYSTEM_PROTOCOLS/
+├── SYS-001-contributor-identity.md
+├── SYS-002-golden-standard-mandate.md
+├── SYS-003-model-switch-discipline.md
+├── SYS-004-subagent-development-workflow.md
+└── SYS-005-sync-obligation.md
+```
+
+---
+
+## 规范 6：NueroNote 项目偏好
+
+**编号**: SYS-006
+**状态**: 强制执行
+**来源**: 2026-04-14
+
+### 要求
+
+- 安全优先级：P0（JWT 密钥、审计日志、配额绕过、XSS、依赖漏洞）
+- 工作流偏好：让 Agent 直接执行完整流程，不喜欢自己跑命令
+- 文档偏好：不使用 Obsidian，希望云同步选项（Mega / pCloud / Dropbox）
+- 内容风格：中国风 / 传统风格
+- 温度参数：0.2
+
+### OpenClaw 义务
+
+OpenClaw 在与用户交互时应遵循上述偏好，
+尤其是不使用 Obsidian、直接执行完整流程而非分段指令。
+
+---
+
+## 版本历史
+
+| 版本 | 日期 | 说明 |
+|------|------|------|
+| 1.0.0 | 2026-04-19 | 初始版本 — 6 项强制规范（SYS-001 至 SYS-006） |
+
+---
+
+## 附录：OpenClaw 自身配置状态（截至 2026-04-19）
+
+```
+Gateway:        ws://127.0.0.1:28791 (loopback)
+Dashboard:      http://10.0.0.69:28789/
+Agent:          main (default), MiniMax-M2.7
+Sessions:       1 active (105k/205k ctx)
+Channels:       未配置
+Systemd:        已安装，运行中 (pid 230349)
+Version:        OpenClaw 2026.4.14 (323493f)
+安全状态:       2 CRITICAL + 4 WARN（待修复）
+```

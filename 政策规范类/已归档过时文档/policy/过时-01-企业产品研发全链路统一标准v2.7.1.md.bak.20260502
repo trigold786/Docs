@@ -1,0 +1,1830 @@
+# 企业产品研发全链路统一标准
+## UNI-MANDATORY-001
+
+**版本：v2.7.1**
+**日期：2026-04-30**
+**性质：唯一权威标准**
+**编号：UNI-MANDATORY-001**
+
+---
+
+## 目录
+
+1. [权威声明
+2. [术语定义总表
+3. [第一部分：L1 强制标准
+   - [L1-001：架构分层禁令
+   - [L1-002：依赖管控禁令
+   - [L1-003：三大基础模块强制接入
+   - [L1-004：数据边界
+   - [L1-005：安全基线
+   - [L1-006：接口规范
+   - [L1-007：事件通信
+   - [L1-008：版本管理
+   - [L1-009：命名规范
+   - [L1-010：质量门槛
+   - [L1-011：调试纪律（铁律）/ Debugging Discipline (Iron Rule)](#l1-011调试纪律铁律--debugging-discipline-iron-rule)
+   - [L1-012：端口分配规范
+4. [第二部分：L2 标准
+   - [L2-001：模块划分
+   - [L2-002：架构设计评审门槛
+   - [L2-003：基础模块复用评估
+   - [L2-004：容错与韧性设计
+   - [L2-005：可观测性设计
+   - [L2-006：技术选型
+   - [L2-007：多端适配优先
+- [L2-011：需求管理与优先级框架
+- [L2-012：MVP定义与PMF验证标准
+- [L2-013：产品指标与质量门槛联动
+- [L2-014：技术债务管理标准
+- [L2-015：版本规划与Roadmap管理
+- [L2-AI-Arch：AI系统架构设计规范
+   - [L2-008：数据库与存储选型
+   - [L2-009：API设计
+   - [L2-010：等保二级技术要求（30项强制接入）/ Equal Protection Level-2 Technical Requirements](#l2-010等保二级技术要求30项强制接入--equal-protection-level-2-technical-requirements)
+5. [第三部分：L3 规则
+   - [L3-001：编码通用原则
+   - [L3-002：多语言编码规范
+   - [L3-003：安全编码
+   - [L3-004：Git工作流
+   - [L3-005：TDD红绿重构循环
+   - [L3-006：测试金字塔
+  - [L3-DB-Migrate：数据库迁移管理
+  - [L3-Java：Java编码专章
+   - [L3-007：灰度与回滚
+   - [L3-008：CI五阶段门控
+   - [L3-009：代码注释规范
+   - [L3-010：API端点注释
+6. [第四部分：L4 规范
+   - [L4-001：Kubernetes加固
+   - [L4-002：监控四大支柱
+   - [L4-003：告警分级
+   - [L4-004：SLA计算
+   - [L4-005：结构化日志
+   - [L4-006：Saga分布式事务
+  - [L4-009：灾备与业务连续性
+   - [L4-007：CQRS读写分离
+   - [L4-008：发布流程
+7. [第五部分：L5 推荐
+   - [L5-001：数据建模
+   - [L5-002：事件风暴
+   - [L5-003：等保三级增强
+   - [L5-004：等保定级预测
+8. [第六部分：L6 参考
+   - [L6-001：术语表
+   - [L6-002：AI服务商清单（24家）/ AI Service Provider List](#l6-002ai服务商清单24家--ai-service-provider-list)
+   - [L6-003：16类基础服务能力矩阵
+   - [L6-004：基础服务依赖关系矩阵
+   - [L6-005：技术实现建议
+9. [归档索引
+10. [版本历史
+
+---
+
+## 权威声明
+
+**【强制标准-001：最高效力
+本文档为企业产品研发领域的最高标准文件，所有工作必须严格遵守。
+This document is the highest standard in the field of enterprise product R&D, and all work must strictly comply.
+
+**【强制标准-002：违反后果
+违反L1强制标准 → 产出视为无效 → 必须整改 → 重新审查，无例外豁免。
+Violating L1 Mandatory Standards → Output is invalid → Must rectify → Re-review, no exceptions.
+
+**【强制标准-003：文件体系
+- L1 强制标准（本文档核心，不可撼动）/ L1 Mandatory Standards (Core of this document, inviolable)
+- L2 标准（架构设计标准）/ L2 Standards (Architecture Design Standards)
+- L3 规则（开发实施规则）/ L3 Rules (Development Implementation Rules)
+- L4 规范（编码/测试/部署规范）/ L4 Specifications (Coding/Testing/Deployment Specifications)
+- L5 推荐（最佳实践）/ L5 Recommended (Best Practices)
+- L6 参考（术语/清单/背景）/ L6 Reference (Terminology/Checklists/Background)
+
+---
+
+## 术语定义总表
+
+### 文档特定缩写（Document-Specific Abbreviations）
+
+| 缩写
+|-------------|------------------|----------------|
+| UNI | Unified | 统一标准体系 |
+| ESD | Enterprise Software Development | 企业软件研发 |
+| ECGS | Enterprise Commerce Golden Standard | 企业商业黄金标准 |
+| ECPAS | Enterprise Commerce Product Architecture Standard | 企业商业产品架构标准 |
+| SOUL | Soul Document | 智能体身份人格定义文档 |
+| SYS | System Protocols | 系统协议体系 |
+
+### 模块命名缩写（Module Naming Abbreviations）
+
+| 缩写
+|-------------|------------------|----------------|
+| BASE | Base Foundation | 基础模块前缀 |
+| BIZ | Business Capability | 业务模块前缀 |
+| AGG | Aggregate | 聚合模块前缀 |
+| MEM | Member | 会员业务域 |
+| UAM | User Account Management | 用户账户管理 |
+| SMS | Security Management System | 安全与合规管理 |
+| PAY | Payment and Settlement | 支付与交易模块 |
+| NTF | Notification Service | 消息通知服务 |
+| MOD | Moderation Service | 内容审核服务 |
+| CSC | Customer Service Center | 客服工单服务 |
+| MKT | Marketing Service | 营销优惠服务 |
+| PIM | Points & Membership | 积分会员服务 |
+| GMG | Growth & Marketing | 用户增长服务 |
+| MED | Media Service | 媒体处理服务 |
+| CDN | Content Delivery Network | 内容分发服务 |
+| SRS | Search & Recommendation | 搜索推荐服务 |
+| DAT | Data Acquisition | 数据采集服务 |
+| INS | Insights & Analytics | 分析洞察服务 |
+| STR | Streaming Service | 实时计算服务 |
+| CFG | Configuration Service | 配置与开关服务 |
+| OPS | Operations Efficiency | 运营效率服务 |
+
+### 架构与协议缩写（Architecture & Protocol Abbreviations）
+
+| 缩写
+|-------------|------------------|----------------|
+| ASG | Architecture Steering Group | 架构评审小组 |
+| DDD | Domain-Driven Design | 领域驱动设计 |
+| CQRS | Command Query Responsibility Separation | 命令查询职责分离 |
+| ADR | Architecture Decision Records | 架构决策记录 |
+| BFF | Backend for Frontend | 后端专属前端 |
+| ES | Elasticsearch | Elasticsearch搜索服务 |
+| SLA | Service Level Agreement | 服务级别协议 |
+| SAST | Static Application Security Testing | 静态应用安全测试 |
+| DAST | Dynamic Application Security Testing | 动态应用安全测试 |
+
+### 安全术语缩写（Security Abbreviations）
+
+| 缩写
+|-------------|------------------|----------------|
+| XSS | Cross-Site Scripting | 跨站脚本攻击 |
+| CSRF | Cross-Site Request Forgery | 跨站请求伪造 |
+| RBAC | Role-Based Access Control | 基于角色的访问控制 |
+| ABAC | Attribute-Based Access Control | 基于属性的访问控制 |
+| MFA | Multi-Factor Authentication | 多因素认证 |
+| SSO | Single Sign-On | 单点登录 |
+| HSTS | HTTP Strict Transport Security | HTTP严格传输安全 |
+
+### 版本管理缩写（Version Management Abbreviations）
+
+| 缩写
+|-------------|------------------|----------------|
+| SemVer | Semantic Versioning | 语义化版本控制 |
+| MAJOR | Major Version Number | 主版本号 |
+| MINOR | Minor Version Number | 次版本号 |
+| PATCH | Patch Version Number | 补丁版本号 |
+
+### 质量与可观测性缩写（Quality & Observability Abbreviations）
+
+| 缩写
+|-------------|------------------|----------------|
+| QPS | Queries Per Second | 每秒查询数 |
+| P50/P90/P99 | 50th/90th/99th Percentile | 第50/90/99百分位延迟 |
+| RED | Rate, Errors, Duration | 服务监控三指标 |
+| USE | Utilization, Saturation, Errors | 资源监控三指标 |
+| API | Application Programming Interface | 应用程序接口 |
+| SDK | Software Development Kit | 软件开发工具包 |
+| ORM | Object-Relational Mapping | 对象关系映射 |
+| CI | Continuous Integration | 持续集成 |
+| CD | Continuous Deployment | 持续部署 |
+
+---
+
+## 第一部分：L1 强制标准
+
+> L1标准0豁免，违反视为产出无效
+
+### L1-001：架构分层禁令
+
+**调用方向自下而上，禁止逆向
+
+```
+L4基础设施层：Kubernetes · PostgreSQL · Redis · Kafka · OSS
+    ↑
+L3基础功能模块层：UAM · SMS · PAY · NTF · CFG · DAT · INS · STR
+    ↑
+L2业务功能模块层：BIZ-MEM · BIZ-ORD · BIZ-PDT · BIZ-MKT
+    ↑
+L1聚合模块层：AGG-USER · AGG-TRADE · AGG-CONTENT
+```
+
+> **注
+> L3 modules align with L6-003 16 foundation services matrix. MSG/LOG/CACHE/FILE are not independent modules; their capabilities are provided by DAT/STR/Redis etc.
+
+**规则
+- ① L4 禁止调用上层
+- ② L3 禁止调用 L2/L1
+- ③ L2 禁止调用其他业务模块
+- ④ L1 通过事件总线通信，禁止同步直接调用
+- ⑤ 依赖层级不得超过3层（含基础设施层，即L4→L1共4层调用链）/ Dependency hierarchy must not exceed 3 layers (including infrastructure, i.e., L4→L1 is a 4-layer call chain)
+
+> **注
+> "Dependency hierarchy must not exceed 2 layers" refers to direct dependency depth between modules (cross-layer calls count as 1 layer); actual call chain depth (L4→L3→L2→L1) can be 4 layers, but modules should not establish direct dependencies spanning more than 2 layers.
+
+### L1-002：依赖管控禁令
+
+**依赖管理禁止事项
+
+- **循环依赖
+- **跨业务线依赖
+- **高层依赖低层具体实现
+- **构造函数注入
+- **依赖层级
+
+### L1-003：三大基础模块强制接入
+
+**所有业务模块必须接入以下三个基础模块
+
+| 模块
+|--------------|------------|---------------------------------------|
+| 用户账户管理
+| 系统安全管理
+| 付费支付
+
+**调用方式
+所有业务模块必须通过统一 SDK 调用基础模块，禁止直连对方数据库。
+All business modules must call foundation modules through unified SDK; direct database connections are prohibited.
+
+### L1-004：数据边界
+
+**数据边界规则
+
+- 每个模块只能读写自己的数据库 schema/collection
+- 跨模块数据共享必须通过 API 或事件总线
+- 所有表必须包含
+- 密码禁止明文存储（必须 Argon2id 或 bcrypt）/ Passwords must not be stored in plaintext (Argon2id or bcrypt required)
+- 敏感数据 ChaCha20-Poly1305 或 AES-256 加密存储
+- **跨模块事件更新场景**：updated_by 填写事件来源 module_id，而非当前写入服务
+- **数据保留期**：业务数据保留期 ≥ 730天（2年）；审计日志保留期 ≥ 1年（金融核心服务保留期按监管要求≥5年）；超过保留期的数据必须归档而非直接物理删除
+
+### L1-005：安全基线
+
+**安全威胁与最低要求
+
+|| 威胁
+|-------------|-------------------------------|
+| SQL注入
+| XSS | 输出转义 + nonce-based CSP + SameSite Cookie；React禁止 `dangerouslySetInnerHTML`；Vue `v-html` 必须通过白名单消毒库（如DOMPurify）；Angular `bypassSecurityTrustHTML` 禁止使用
+| CSRF | Token验证（32字节随机数），Session HttpOnly，Token存储与刷新机制（无操作30分钟后刷新）；Token必须通过 `X-CSRF-Token` 请求头传递；优先存储在Memory或HttpOnly Cookie中
+| JWT | 算法强制RS256或ES256，禁止HS256；必须实现刷新机制（access_token≤15min，refresh_token≤7d）；Token吊销机制必须支持（黑名单或短TTL）；必须支持密钥版本管理（kid），历史Token验证能力保留≥24小时；建议每90天轮换一次
+| IDOR水平越权 | 所有资源访问必须校验ownership（当前用户是否拥有该资源），禁止仅依赖ID自增
+| XXE | XML解析禁用外部实体（`ENTITY`/`SYSTEM`），Java禁用 `DocumentBuilderFactory DTD`
+| 反序列化 | ObjectInputStream必须使用白名单（allowList）；禁止原生Java序列化跨服务传输
+| 文件上传 | 文件类型白名单（MIME+扩展名双重校验），大小限制（单文件≤50MB），存储路径与Web根隔离 |
+| SSRF | URL验证：禁止内网IP访问（127.0.0.1/10.0.0.0/172.16.0.0等）；协议限制（仅HTTP/HTTPS）；禁止用户控制完整URL
+| 路径遍历 | 文件路径必须做规范化（realpath）校验；禁止用户控制路径中的`..`
+| 日志注入 | 用户输入写入日志必须转义换行符（`\n`）和控制字符；防止伪造日志条目
+| 暴力破解
+| 传输
+| 敏感数据
+| 审计
+
+**安全测试验证要求
+
+|| 安全威胁
+|-------------------|----------------------------------|
+| SQL注入 | 自动化SQL注入测试（SQLMap或等效工具），CI强制执行
+| XSS | 自动化XSS扫描 + 输出编码白盒测试
+| CSRF | 自动化CSRF Token验证测试，覆盖所有状态修改API
+| JWT | 自动化测试：RS256/ES256算法验证 + Token刷新机制 + 吊销机制 + 密钥轮换
+| IDOR | 自动化水平越权测试：不同用户互访资源必须返回403
+| 暴力破解 | 登录失败锁定机制测试（5次失败后验证账户锁定）
+
+### L1-006：接口规范
+
+**API设计规范
+
+- RESTful API，路径版本化（/v1/ /v2/）/ RESTful API, path-based versioning (/v1/ /v2/)
+- 认证
+- 格式
+- 响应
+- 废弃
+- 状态修改 API 必须校验 CSRF Token
+
+**分页规范
+- 支持 cursor-based 分页（推荐，用于大数据量）/ cursor-based pagination (recommended, for large datasets)
+- 支持 offset-based 分页（用于小数据集）/ offset-based pagination (for small datasets)
+- 响应必须包含分页元数据
+
+**幂等性规范
+- 所有状态修改API必须支持幂等键
+- 请求头：`Idempotency-Key: <唯一键>`，有效时长24小时
+- 重复请求在有效期内返回相同响应
+
+**限流规范
+- 响应头必须包含限流信息
+  - `X-RateLimit-Limit`：总限额
+  - `X-RateLimit-Remaining`：剩余可用
+  - `X-RateLimit-Reset`：重置时间戳
+- 超出限流返回 `429 Too Many Requests`
+
+### L1-007：事件通信
+
+**事件总线规范
+
+- 同步 SLA
+- **金融交易场景
+- 事件格式7字段
+- 持久化
+- 消费者必须幂等
+- 失败事件进入 DLQ（死信队列）/ Failed events go to DLQ (Dead Letter Queue)
+
+**Kafka配置补充
+- 高吞吐场景：`acks=1, linger.ms=0`，消费者组必须使用专属分区避免乱序
+- 低延迟场景：P99 ≤ 10ms 必须使用上述低延迟配置
+
+### L1-008：版本管理
+
+**语义化版本控制
+
+- **SemVer：MAJOR.MINOR.PATCH**
+  - MAJOR：不兼容变更
+  - MINOR：向后兼容功能新增
+  - PATCH：向后兼容 bug 修复
+- 基础模块不得破坏向后兼容
+- 主版本升级必须提供迁移文档
+
+**【强制标准-004：标准修订版本管理
+本标准（UNI-MANDATORY-001）经过任何修订，都视作版本变更，应评估变更分类后对其版本号进行升版。
+Any revision to this standard (UNI-MANDATORY-001) constitutes a version change; the change category must be evaluated before version number escalation.
+
+**【强制标准-005：自建 UI 系统优先
+组织拥有自建 UI 设计系统时，应优先使用自建系统而非引入第三方 UI 框架，以保障品牌一致性与维护可控性。
+When the organization has a self-built UI design system, it must be prioritized over introducing third-party UI frameworks, ensuring brand consistency and maintainability.
+
+| 适用条件
+|--------------------------------|-------------------|
+| 已有成熟自建 UI 系统（含组件库、设计令牌、主题系统）/ Mature self-built UI system exists (component library, design tokens, theme system) | **必须优先使用**，仅在自建系统无法满足的交互场景下才可引入第三方框架作为补充
+| 自建 UI 系统处于建设阶段
+| 无自建 UI 系统
+
+> **说明**：自建 UI 系统须包含设计令牌（Design Tokens）、多主题支持（深色/浅色/高对比等）、完整组件库（Button/Input/Select/Table/Modal 等基础组件），并满足可访问性（WCAG 2.1 AA）要求。
+> **Note**: Self-built UI systems must include Design Tokens, multi-theme support (dark/light/high-contrast, etc.), complete component library (Button/Input/Select/Table/Modal, etc.), and meet WCAG 2.1 AA accessibility requirements.
+
+### L1-009：命名规范
+
+**模块命名
+- 基础模块
+- 业务模块
+- 聚合模块
+
+**Git仓库
+
+**Commit格式
+
+| type | 中文说明
+|------|-------------------|---------|
+| feat | 新功能 | New feature |
+| fix | 修复bug | Bug fix |
+| docs | 文档更新 | Documentation |
+| style | 格式调整 | Formatting |
+| refactor | 重构 | Refactoring |
+| test | 测试 | Testing |
+| chore | 依赖/构建 | Dependencies/Build |
+
+### L1-010：质量门槛
+
+**质量门槛要求
+
+- **单元测试覆盖率（分级要求）/ Unit test coverage (tiered requirements)：**
+  - 安全核心模块（UAM/PAY/SMS/KeyVault类）：**分支覆盖率 ≥ 85%**，突变测试得分 ≥ 70%
+  - 普通业务模块：**行覆盖率 ≥ 80%**
+  - 以上CI不通过禁止合并
+- 突变测试（Mutation Testing）：核心业务逻辑（CryptoService/密码校验/支付计算）必须启用 pitest，验证测试有效性
+- 所有 Merge/PR 至少 1 人审批
+- 重大变更必须架构评审
+- 安全问题
+- 灰度发布
+- 自动回滚
+
+### L1-011：调试纪律（铁律）/ Debugging Discipline (Iron Rule)
+
+**铁律
+
+**Phase 1（根因调查）/ Phase 1 (Root Cause Investigation)：**
+仔细阅读错误
+Carefully read errors
+
+**Phase 2（模式分析）/ Phase 2 (Pattern Analysis)：**
+找相似正常代码
+Find similar working code
+
+**Phase 3（假设与测试）/ Phase 3 (Hypothesis & Testing)：**
+陈述假设
+State hypothesis
+
+**Phase 4（修复验证）/ Phase 4 (Fix Verification)：**
+创建回归测试
+Create regression test
+
+**⚠️ 3次失败后
+
+### L1-012：端口分配规范
+**统一端口段范围
+| 端口段
+|---------------------|--------------|----------------|
+| 40000-40999 | 前端静态服务/Node.js/BFF/网关服务 | 前端Web服务、BFF层、API网关 |
+| 41000-41999 | 业务微服务 | 交易服务、行情服务、清结算服务等业务模块 |
+| 42000-42999 | 基础服务 | 用户中心、权限服务、通知服务、配置中心等公共基础模块 |
+| 43000-43999 | 中间件代理/辅助服务 | 数据库代理、消息队列代理、监控采集服务等 |
+| 44000-44999 | 测试/开发调试临时服务 | 临时测试环境、调试预览服务等短期运行服务 |
+| 45000-49999 | 预留扩展 | 未来新增业务类型预留 |
+
+**强制规则
+1. 新项目必须严格按上述分类分配端口，禁止使用1-1024系统端口、80/8080/18080等常用公网端口用于开发服务，避免端口冲突与流量拦截
+2. 已存在的非中间件、非公用系统的开发项目，需在发布之日起**7天内（2026-05-06前）**完成端口迁移，统一使用40000-49999段端口
+3. 中间件/公用系统（MySQL/Redis/Nginx/操作系统服务等）不受此规则限制，保持原有端口配置
+4. 端口分配需在项目wiki统一登记，同一主机端口唯一，避免冲突，新增端口需提前校验未被占用
+
+---
+
+## 第二部分：L2 标准
+
+### L2-001：模块划分
+
+**模块划分原则
+
+- 按业务能力（Business Capability）划分，模块边界=DDD边界上下文
+- 粒度：一个模块包含 3-10 个强相关 API
+- 每个模块必须文档化
+
+### L2-002：架构设计评审门槛
+
+**必须评审的情形
+
+- 新增基础模块
+- 跨业务线调用关系变更
+- 引入新技术栈或中间件
+- 数据库选型变更
+- 安全策略变更
+
+**ADR强制记录
+所有架构评审结论**必须**以Architecture Decision Records（ADR）格式记录，包含：
+- **Context（背景）**：决策前的现状和问题
+- **Decision（决策）**：具体的技术决策内容
+- **Consequences（后果）**：该决策的正面和负面影响
+ADR必须入库（`docs/adr/`目录），格式参考MADR标准，每个ADR附带编号（如ADR-001）和日期。重大决策的ADR有效期6个月，超期必须Review更新状态（Active/Deprecated/Superseded）。
+
+**BFF层定位
+Backend for Frontend（BFF）作为L1.5独立层，位于L1业务服务与L0基础设施之间：
+- BFF层职责：多端适配（Web/Mobile/第三方）、接口聚合、协议转换、认证透传
+- BFF**不得**包含业务逻辑，仅做数据编排和协议转换
+- BFF调用链路：Client → L1.5 BFF → L1 Service → L2 Component → L0 Infrastructure
+- BFF与L1的边界清晰：跨边界只能是HTTP/gRPC，禁止直接操作对方数据库
+
+**评审组成与时限
+ASG + 业务线技术负责人，7 工作日内结论
+ASG + Business Line Technical Lead, conclusion within 7 working days
+
+（ADR强制/BFF定位：专家团队评审新增）
+
+### L2-003：基础模块复用评估
+
+**新增业务强制步骤
+
+- □ 账户能力：现有 UAM 能满足吗？/ Account capability: Can existing UAM meet requirements?
+- □ 安全能力：现有 SMS 能满足吗？/ Security capability: Can existing SMS meet requirements?
+- □ 支付能力：现有 PAY 能满足吗？/ Payment capability: Can existing PAY meet requirements?
+
+**自建判断
+开发成本 > 复用成本 × 复用业务线数量 → 不值得复用
+Development cost > Reuse cost × Number of reusing business lines → Not worth reusing
+
+### L2-004：容错与韧性设计
+
+**每个模块必须设计
+
+- 超时控制（默认 30s）/ Timeout control (default 30s)
+- 重试（最多 3 次，指数退避）/ Retry (max 3 times, exponential backoff)
+- 熔断降级
+- 限流（超出处理能力时友好拒绝）/ Rate limiting (graceful rejection when exceeding capacity)
+
+**Circuit Breaker配置
+滑动窗口：10次请求（时间窗口内）/ 失败率阈值：50%（滑动窗口内）/ 半开状态：允许3次试探性调用
+Sliding window: 10 requests (within time window)
+
+### L2-005：可观测性设计
+
+**每个模块必须定义
+
+- **Metrics指标
+- **Tracing链路
+- **Logging日志
+  - 禁止日志中出现
+- **Health健康检查
+
+### L2-006：技术选型
+
+**商业运营优先原则
+架构设计时，优先选择经过大规模商业验证、生态成熟、技术文档完善、社区活跃的产品。技术选型应综合考虑团队技术储备、业务场景复杂度、系统规模、运维成本等因素。
+When designing architecture, prioritize products with large-scale commercial validation, mature ecosystem, comprehensive technical documentation, and active community. Technology selection should comprehensively consider team technical reserve, business scenario complexity, system scale, and operational costs.
+
+#### 后端框架（商业运营优先
+
+| 优先级
+|------------------|------------------|----------------------|-------------------|
+| P0 | **Java Spring Boot** | 中大型商业系统、电商、金融、企业级应用
+| P1 | Go (Gin/Echo) | 高并发、微服务、实时系统
+| P2 | Python FastAPI | 快速原型、AI集成、数据服务
+| P3 | Node.js (NestJS) | 全栈团队、中小项目
+
+#### 前端框架（商业运营优先
+
+| 优先级
+|------------------|------------------|----------------------|-------------------|
+| P0 | **React + TypeScript** | 中大型商业系统、企业级应用
+| P1 | Vue 3 + TypeScript | 快速开发、SaaS产品
+| P2 | Next.js (React) | 全栈应用、SSR优先
+| P3 | Angular | 超大型企业应用
+
+**【强制标准-005：自建 UI 系统优先
+组织拥有自建 UI 设计系统时，应优先使用自建系统而非引入第三方 UI 框架，以保障品牌一致性与维护可控性。
+When the organization has a self-built UI design system, it must be prioritized over introducing third-party UI frameworks, ensuring brand consistency and maintainability.
+
+| 适用条件
+|--------------------------------|-------------------|
+| 已有成熟自建 UI 系统（含组件库、设计令牌、主题系统）/ Mature self-built UI system exists (component library, design tokens, theme system) | **必须优先使用**，仅在自建系统无法满足的交互场景下才可引入第三方框架作为补充
+| 自建 UI 系统处于建设阶段
+| 无自建 UI 系统
+
+> **说明**：自建 UI 系统须包含设计令牌（Design Tokens）、多主题支持（深色/浅色/高对比等）、完整组件库（Button/Input/Select/Table/Modal 等基础组件），并满足可访问性（WCAG 2.1 AA）要求。
+> **Note**: Self-built UI systems must include Design Tokens, multi-theme support (dark/light/high-contrast, etc.), complete component library (Button/Input/Select/Table/Modal, etc.), and meet WCAG 2.1 AA accessibility requirements.
+
+**【强制标准-006：多端适配优先
+前端设计与开发必须优先考虑移动设备（手机）、平板设备的显示适配性和用户体验，不得将移动端视为"降级版本"而降低用户体验标准。设计时应以典型设备型号为基准，制定差异化布局策略，实现真正的设备友好型体验。
+
+All frontend design and development must prioritize display adaptation and user experience for mobile devices (phones) and tablets. Mobile shall never be treated as a "degraded version" with reduced user experience standards. Design should use typical device models as benchmarks to develop differentiated layout strategies, achieving truly device-friendly experiences.
+
+| 设备类别
+|---------------------------|----------------------------------------|--------------------------|---------------------------|
+| 手机
+| 平板
+| 桌面
+
+**强制执行要求
+
+1. **不得降级处理
+   - 移动端不得删除功能或降低信息完整度，必须保证核心业务流程在移动端的完整性和一致性
+   - Mobile must not delete features or reduce information completeness; core business processes must maintain completeness and consistency on mobile
+
+2. **设备型号建模范
+   - 设计时应参考主流设备屏幕尺寸（Physical Pixels），并通过设备型号辅助判断交互模式（如是否为折叠屏设备、是否支持触控笔）
+   - Design should reference mainstream device screen sizes (Physical Pixels) and use device models to infer interaction modes (e.g., foldable device, stylus support)
+
+3. **差异化布局断点
+   - 响应式断点应基于内容需求而非固定设备宽度，确保任何设备下内容呈现最优
+   - Responsive breakpoints should be based on content needs, not fixed device widths, ensuring optimal content presentation on any device
+
+4. **触控与指针分离
+   - 同一组件在触控设备和指针设备上须有差异化交互反馈（如 hover 态、active 态）
+   - Same component must have differentiated interaction feedback on touch vs pointer devices (e.g., hover state, active state)
+
+5. **性能预算
+   - 移动端首屏加载目标：3G 网络下 < 3s；LCP < 2.5s；CLS < 0.1；INP < 200ms
+   - Mobile first-screen load target: < 3s on 3G network; LCP < 2.5s; CLS < 0.1; INP < 200ms
+
+6. **前端性能标准
+   - **FCP < 1.8s，LCP < 2.5s，CLS < 0.1，INP < 200ms**
+   - JS Bundle单文件 ≤ 500KB（压缩后），首屏依赖 ≤ 200KB
+   - 图片必须使用 WebP/AVIF 格式，单张 ≤ 100KB
+   - 必须实现代码分割（Code Splitting）和 Tree Shaking
+   - 高频数据更新场景（>100数据点/秒）必须使用 `requestAnimationFrame` 批处理DOM更新，禁止同步操作DOM
+   - 金融看板类应用必须支持实时数据更新，数据量 > 1000条时必须使用虚拟滚动（Virtual Scrolling）
+
+> **Note**: Device Model refers to specific hardware models (e.g., iPhone 16 Pro, Xiaomi 14 Ultra, Samsung Galaxy S25 Ultra). Identified via User-Agent or device fingerprint, it helps determine device category, screen density, and interaction capabilities (touch/hover/foldable) for more precise adaptation strategies.
+
+#### 数据库（商业运营优先
+
+| 优先级
+|------------------|------------------|----------------------|-------------------|
+| P0 | **PostgreSQL** | 核心业务数据、关系型存储
+| P1 | MySQL | 互联网业务、读多写少
+| P2 | Redis | 缓存、会话、实时数据
+| P3 | MongoDB | 文档型数据、敏捷开发
+
+#### 缓存与存储
+
+| 组件
+|-----------------|---------------|-------------------|
+| 缓存
+| 搜索引擎
+| 对象存储
+| 消息队列
+
+#### 运维与容器
+
+|| 组件
+|-----------------|---------------|-------------------|
+| 容器化
+| 编排
+| 反向代理
+| CI/CD | GitLab CI
+| **GitOps** | **ArgoCD
+| **Service Mesh** | **Istio
+| **IaC扫描** | **Checkov
+| **容器镜像安全** | **Trivy + Cosign** | **镜像漏洞扫描（Critical/High禁止部署）；镜像签名验证（生产环境强制）/ Image vulnerability scan (Critical/High prohibited); image signature verification (production mandatory)** |
+
+### L2-008：数据库与存储选型
+
+**选型原则
+商业运营系统优先选择经过大规模验证的数据库产品，PostgreSQL 作为默认首选。
+Commercial operation systems should prioritize database products with large-scale validation; PostgreSQL is the default first choice.
+
+| 类型
+|------------|----------------|-------------------|-------------------|
+| 关系型
+| 分析型
+| 缓存
+| 搜索
+| 向量
+| 时序
+| 对象存储
+
+### L2-009：API设计
+
+**API设计规范
+
+- URL 版本化
+- 废弃提前 6 个月通知，过渡期 6 个月
+- 响应头
+- 错误码规范
+
+### L2-010：等保二级技术要求（30项强制接入）/ Equal Protection Level-2 Technical Requirements
+
+**【身份鉴别】（8项）/ Identity Authentication (8 items)**
+
+- □ 强壮密码策略（大小写+数字+特殊字符，≥8位）/ Strong password policy (upper+lower+number+special, ≥8 chars)
+- □ 多因素认证支持（MFA/OTP/生物识别）/ Multi-factor authentication support (MFA/OTP/biometrics)
+- □ 每个用户唯一标识（user_id）/ Each user has unique identifier (user_id)
+- □ 禁止共享账号
+- □ 密码 Argon2id/bcrypt 存储
+- □ 登录失败锁定（5次失败锁5分钟）/ Login failure lockout (5 failures = 5 min)
+- □ 会话超时登出（≤30分钟idle）/ Session timeout logout (≤30 min idle)
+- □ 审计日志记录登录行为
+
+**【访问控制】（6项）/ Access Control (6 items)**
+
+- □ 最小权限（RBAC/ABAC）/ Least privilege (RBAC/ABAC)
+- □ 管理员权限分离（不用root运行服务）/ Admin privilege separation (don't run services as root)
+- □ 敏感操作二次确认
+- □ 禁止访问控制权限篡改
+- □ 账户分配遵循最小权限
+- □ 定期审查账户权限（≥90天）/ Periodic account permission review (≥90 days)
+
+**【安全审计】（5项）/ Security Audit (5 items)**
+
+- □ 记录所有状态变更操作
+- □ 审计日志不可删除（append-only）/ Audit logs non-deletable (append-only)
+- □ 日志保留≥180天
+- □ 日志防篡改（哈希链）/ Log tamper-proofing (hash chain)
+- □ 审计记录含：时间/用户/操作/结果/客户端IP
+
+**【数据保护】（6项）/ Data Protection (6 items)**
+
+- □ TLS 1.2+ 传输加密
+- □ ChaCha20-Poly1305/AES-256 存储加密
+- □ 敏感数据脱敏展示
+- □ 重要数据备份（≥每日增量，≥每周全量）/ Important data backup (≥daily incremental, ≥weekly full)
+- □ 远程数据销毁能力
+- □ 数据删除记录审计日志
+
+**【网络保护】（5项）/ Network Protection (5 items)**
+
+- □ HTTPS 全站强制
+- □ 安全响应头完整（CSP/X-Frame-Options/HSTS）/ Complete security response headers (CSP/X-Frame-Options/HSTS)
+- □ 接口限速防 DDoS
+- □ 网络边界防火墙隔离
+- □ 无线网络 WPA2/WPA3
+
+**【主机保护】（6项）/ Host Protection (6 items)**
+
+- □ 非root用户运行
+- □ 最小系统调用过滤
+- □ 独立数据目录权限（chmod 700）/ Isolated data directory permissions (chmod 700)
+- □ 系统安全补丁≤7天更新
+- □ 禁止开放不必要端口
+- □ 日志集中收集分析
+
+---
+
+---
+
+### L2-011：需求管理与优先级框架
+
+**适用范围
+
+**需求管理
+- 所有需求必须以用户故事格式描述：`As a [role] I want [goal] so that [benefit]`
+- 每个用户故事必须包含验收标准（Acceptance Criteria），可测试、可验证
+- 需求变更必须经过产品经理和技术负责人联合评审
+
+**优先级决策框架
+| 方法
+|-------------|---------------------|---------------|
+| ICE | 内部迭代
+| MoSCoW | 资源有限
+| RICE | 跨团队资源竞争
+
+**产品/技术联合评审
+- 复杂技术实现需求 → 技术负责人 + 产品经理联合估算
+- 架构风险需求 → 必须经过架构评审（L2-002）
+
+### L2-012：MVP定义与PMF验证标准
+
+**MVP定义
+- MVP（最简可行产品）：具备核心价值的最小功能集，可验证产品假设
+- MVP不等于功能完整版本，而是验证核心假设的最小实验
+
+**PMF验证标准
+| 指标
+|-------------|-------------------|--------------------------|
+| 用户留存率
+| 推荐意愿
+| 使用频率
+| 核心转化率
+
+**验证要求
+- 每个MVP阶段必须有明确的PMF验证指标
+- PMF未达标的版本不得进入规模化推广阶段
+- PMF数据必须量化记录，不得以主观判断替代
+
+### L2-013：产品指标与质量门槛联动
+
+**联动机制
+灰度发布期间，必须同时监控技术健康指标和产品效果指标：
+| 指标类型
+|---------------------|---------------------------|-----------------------------|
+| 技术指标
+| 产品指标
+
+**告警联动
+- 产品指标劣化 → 触发产品复盘（非技术告警）
+- 技术告警和产品指标劣化同时发生时 → P0 级别处理
+
+### L2-014：技术债务管理标准
+
+**分类处置
+
+| 类型
+|------------|-------------------|-------------------------------|
+| 急性债务
+| 慢性债务
+| 战略性债务
+
+**管理要求
+- 技术债务必须作为独立的 backlog 项，不得隐藏在业务需求中
+- 每个 Sprint/迭代必须预留固定比例（建议20%）处理技术债务
+- 技术债务不得在未告知产品经理的情况下引入
+
+### L2-015：版本规划与Roadmap管理
+
+**Roadmap结构
+- 年度大方向（Theme）：描述年度目标和战略方向
+- 季度详细规划（Quarter）：具体功能、目标、交付时间
+- 版本冻结（Code Freeze）：版本冻结后**不接受新需求**（除非紧急P0）
+
+**版本生命周期
+```
+规划中(Planning) → 开发中(Development) → 冻结(Frozen) → 发布(Released) → 维护(Maintenance)
+```
+
+**发布后复盘
+- 发布后15天内必须完成复盘
+- 复盘内容：目标达成情况/问题与根因/改进措施
+- 复盘结论必须文档化并存档
+
+### L2-AI-Arch：AI系统架构设计规范
+
+**适用范围
+
+**模型路由与抽象层
+- 必须实现模型抽象层，禁止硬编码特定模型名称
+- 多模型Fallback：必须定义兜底策略（主模型不可用时自动切换备选）
+- Prompt版本管理：每个Prompt必须版本化，与应用代码版本分离管理
+
+**Prompt工程规范
+- Prompt模板必须文档化，包含输入/输出格式/示例/边界条件
+- Prompt变更必须经过Code Review
+- 禁止在Prompt中硬编码敏感信息（密钥/用户隐私）
+
+**AI成本控制
+- 所有LLM调用必须记录Token消耗（input/output/缓存）
+- 必须设置单次请求Token上限（防止异常Prompt导致的成本爆炸）
+- 建议实现Batch API用于非实时场景（成本降低50-70%）
+
+**AI可观测性
+| 指标
+|-------------|-------------------|--------------------------|
+| Token消耗 | 每小时/每天Token使用量 | 环比 > 100% |
+| 幻觉率 | 模型输出需人工审核场景的错误率 | > 5% |
+| 响应延迟 | P99延迟 | > 30s |
+
+**RAG可靠性（如适用）/ RAG Reliability (if applicable)：**
+- 向量检索召回率必须建立基准（Recall@K ≥ 80%）
+- Chunk size策略必须文档化（建议 512-1024 tokens）
+- 检索结果必须标注来源（Source Attribution）
+
+### L3-011：资产复用检查
+
+**【强制检查
+开发、迭代、改进、bug修复前，必须执行资产复用检查。
+
+**资产定义
+- 软件：工具、组件、插件、库、框架
+- 硬件：已安装的程序、服务、设备驱动
+- 文档：配置模板、部署脚本、参考文档
+
+**检查流程
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  步骤1：在本机搜索已有资产                                 │
+│  which <软件名>                                          │
+│  find /usr /opt /home -name "<软件名>*" 2>/dev/null      │
+│  pip list
+│  docker images | grep <资产名>                           │
+└─────────────────────────────────────────────────────────┘
+                         ↓
+┌─────────────────────────────────────────────────────────┐
+│  步骤2：评估兼容性                                        │
+│  □ 版本是否兼容当前项目？                                  │
+│  □ 依赖是否冲突？                                         │
+│  □ 许可证是否允许集成？                                    │
+│  □ 功能是否满足需求？                                      │
+└─────────────────────────────────────────────────────────┘
+                         ↓
+┌─────────────────────────────────────────────────────────┐
+│  步骤3：决策                                             │
+│  可兼用 → 使用已有资产，禁止重复下载                        │
+│  不兼容 → 记录原因 → 方可考虑全新安装                       │
+└─────────────────────────────────────────────────────────┘
+```
+
+**强制要求
+- ❌ 禁止在已有资产的情况下重复下载安装
+- ❌ 禁止忽略兼容性问题强行安装
+- ✅ 决策必须记录在 CHANGELOG 或 commit message 中
+- ✅ 首次安装新软件后，更新本机资产清单
+
+**资产清单维护
+```
+~/.local/share/hermes/assets-inventory.md
+```
+格式：
+```markdown
+## 已安装软件资产清单
+
+| 资产名 | 版本 | 安装日期 | 用途 | 路径 |
+|--------|------|----------|------|------|
+| rustc | 1.75.0 | 2026-04-19 | Rust编译 | /root/.cargo/bin/rustc |
+```
+
+---
+
+## 第三部分：L3 规则
+
+### L3-001：编码通用原则
+
+**编码基本规则
+
+- 命名即注释：变量/函数名必须自解释
+- 单一职责：每个函数只做一件事
+- 异常处理：永远不吞异常（至少记录日志）/ Exception handling: never swallow exceptions (at least log them)
+- 硬编码禁止：配置外置，禁止魔法数字
+- 资源释放：finally/defer 中释放
+- 边界检查：外部输入必须校验（类型/长度/范围）/ Boundary checking: external input must be validated (type/length/range)
+- 日志规范：INFO记录流程，WARN记录可恢复异常，ERROR记录故障
+
+### L3-002：多语言编码规范
+
+**【Go
+
+- □ 永远不忽略 error
+- □ 每个函数传递 context.Context
+- □ 依赖注入通过 wire
+- □ golangci-lint 必须通过
+
+**【Python
+
+- □ 所有函数有 Type Hints
+- □ Black 格式化
+- □ flake8 + mypy 必须通过
+
+**【TypeScript
+
+- □ 强制 TypeScript，禁止 any
+- □ async/await，禁止 Promise 嵌套
+- □ ESLint + Prettier 必须通过
+
+**【Java
+
+- □ 线程安全集合优先
+- □ Lint 必须通过
+
+**【Swift
+
+- □ 官方编码规范
+- □ 值类型优先
+
+### L3-003：安全编码
+
+**安全编码规范
+
+- ✅ 参数化查询
+- ❌ 禁止字符串拼接 SQL
+- ✅ 模板引擎默认转义
+- ❌ 禁止在日志中记录密码/Token/密钥
+- ❌ 禁止在 Git 中提交密钥
+- ❌ 禁止在 URL 参数中传递敏感数据
+
+### L3-Security-FE：前端安全编码专章
+
+**适用范围
+
+**Cookie安全
+- `Secure` + `HttpOnly` + `SameSite=Strict/Lax` 属性必须同时设置
+- 敏感数据禁止存储在 `localStorage`/`sessionStorage`（易受XSS攻击）
+
+**CSP内容安全策略
+- 生产环境必须部署严格CSP：`default-src 'none'; script-src 'self' nonce`
+- 禁止任何内联脚本（inline script），必须使用外部文件
+- 必须配置 `report-uri` 指向安全监控系统
+
+**点击劫持防护
+- 必须设置 `X-Frame-Options: DENY` 或 `frame-ancestors: 'none'` CSP指令
+
+**第三方脚本安全
+- 所有第三方脚本必须启用 SRI（Subresource Integrity）
+- `<script src="..." integrity="sha256-..." crossorigin="anonymous">`
+
+**前端状态安全
+- 敏感数据优先使用内存变量存储，页面关闭后自动清除
+- 禁止在全局变量（window对象）存储敏感数据
+- 路由切换时必须清除上一页面的敏感数据
+
+**API安全
+- 所有API请求必须通过 BFF/网关，禁止直接暴露后端API
+- 禁止在URL中传递交易参数（账号/金额/标的），必须使用请求Body
+- 关键操作（转账/修改密码/删除资产）必须支持二次确认（硬件Token/U盾）
+
+**SSR安全（服务端渲染）/ SSR Security：**
+- hydrate攻击防护：用户输入在服务端必须严格校验
+- 禁止在服务端渲染时将敏感数据嵌入HTML
+
+**React安全补充
+- 禁止 `dangerouslySetInnerHTML`
+- 禁止用户输入直接作为JSX渲染，必须经过白名单消毒
+
+**Vue安全补充
+- `v-html` 必须通过白名单消毒库（如DOMPurify）处理
+- 禁止用户输入直接作为模板编译
+
+**TypeScript类型安全
+- 外部输入必须标注 `unknown`，禁止使用 `any`
+- 类型断言 `as` 仅限类型守卫之后使用，禁止裸 `as`
+- 泛型约束必须明确，禁止无约束泛型
+
+**金融交易前端增强
+- 交易操作UI响应必须 ≤ 100ms
+- 必须实现乐观更新（Optimistic UI），失败后回滚
+- 禁止在主线程执行 > 50ms的同步计算，大数据必须使用Web Worker
+- WebSocket连接必须实现自动重连（指数退避）+ 心跳检测（30s超时）
+
+### L3-004：Git工作流
+
+**分支命名
+
+- master
+- feature/{issue-id}-{short-desc}
+- fix/{issue-id}-{short-desc}
+- release/v{version}
+- hotfix/{issue-id}-{short-desc}
+
+**Commit格式
+
+| type | 中文
+|------|----------------|---------|
+| feat | 新功能 | New feature |
+| fix | 修复bug | Bug fix |
+| docs | 文档更新 | Documentation update |
+| style | 格式调整 | Formatting change |
+| refactor | 重构 | Refactoring |
+| test | 测试 | Testing |
+| chore | 依赖/构建 | Dependencies/Build |
+
+**CHANGELOG强制
+每次 PR/Merge 前，最新条目必须包含 Contributor Identity
+Before each PR/Merge, latest entry must include Contributor Identity
+
+### L3-005：TDD红绿重构循环
+
+**TDD三阶段
+
+- **RED（红）**：写失败测试（明确要实现的功能）→ git commit "test: ..."
+- **GREEN（绿）**：写最小代码通过 → git commit "feat: ..."
+- **REFACTOR（重构）**：改善代码结构 → git commit "refactor: ..."
+
+**约束
+- ① 不跳步（不先写代码再补测试）/ No skipping (don't write code then add tests)
+- ② 不在 RED 时写多余测试
+- ③ 不在 GREEN 时重构
+
+### L3-006：测试金字塔
+
+**测试分层
+
+- **单元测试（底层，大量）/ Unit tests (bottom, many)**：≥80% 覆盖率，CI 门控
+- **集成测试（中层，中等）/ Integration tests (middle, moderate)**：API 交互测试
+- **端到端测试（顶层，少量）/ E2E tests (top, few)**：核心路径 100% 覆盖
+
+### L3-Perf：性能测试规范
+
+**适用范围
+
+**性能基准建立
+- 每个API端点必须建立性能基准（`benchmarks/v{version}/api-{endpoint}.yaml`）
+- 基准数据：QPS、P50/P90/P99延迟、错误率、吞吐量
+- 基准数据必须入库，与代码版本关联
+
+**性能回归门禁
+- P99 > 基准 × 1.2 → Pipeline失败
+- 错误率 > 基准 × 2 → Pipeline失败
+- 内存增长 > 基准 × 1.1 → Pipeline失败
+
+**压测类型与触发条件
+
+|| 类型 | 触发条件 | 目标 |
+||------|----------|------|
+| 基准压测 | 每次主版本发布前 | 验证性能不劣化 |
+| 容量测试 | 每季度 | 验证最大容量 |
+| 峰值模拟 | 重大版本发布前 | 模拟双11/大促场景 |
+| 金融核心链路 | 每次发布前 | P99≤50ms，错误率<0.01% |
+
+**量化交易系统增强
+- 核心交易API：P99 ≤ 50ms，P999 ≤ 100ms
+- 订单簿更新：P99 ≤ 10ms
+- 行情数据推送：P99 ≤ 5ms
+- 交易链路总延迟（入口→处理→存储）：≤ 100ms
+
+**压测工具
+
+### L3-007：灰度与回滚
+
+**灰度条件（进入下一阶段）/ Gradual conditions (advance to next stage)：**
+
+- ✅ 错误率 < 0.1%
+- ✅ P99 < 基准 × 1.2
+- ✅ 无 P0/P1 告警
+
+**自动回滚触发
+错误率 > 1% 或 P99 > 500ms 或任意 P0
+
+**回滚操作
+kubectl rollout undo deployment/{name}（15 分钟内
+
+### L3-008：CI五阶段门控
+
+**CI流水线五阶段
+
+- **Stage 1**：Lint + 类型检查 + 循环依赖检测
+- **Stage 2**：单元测试（覆盖率见L1-010）+ 集成测试 + **契约测试（消费者驱动契约测试/Pact）**
+- **Stage 3**：SAST + 依赖漏洞扫描 + Secret 检测 + **前端npm包安全扫描（npm audit/Snyk，Critical/High → Pipeline失败）**
+- **Stage 4**：Docker 镜像构建 + 推送仓库 + **Cosign镜像签名 + SBOM生成**
+- **Stage 5**：部署测试 + 自动化验收 + 部署 staging + **DAST动态安全扫描（OWASP ZAP）**
+
+**生产部署门禁
+Staging验证通过后，必须经过以下审批才能部署生产：
+- **SRE工程师审批**：确认监控/SLO/灾备预案就绪
+- **业务负责人审批**：确认业务指标可接受
+双审批完成后才能执行生产部署，审批记录必须留档。
+
+**禁止事项
+- ❌ 禁止跳过任何 Stage
+- ❌ 禁止手动修改 CI 配置绕过检查
+- ❌ DAST/SAST High/Critical漏洞不得绕过（除非经过安全评审并记录）
+
+（契约测试/DAST/Production Gate/前端安全扫描：专家团队评审修订）
+
+### L3-DB-Migrate：数据库迁移管理
+
+**适用范围
+
+**强制工具
+- **必须**使用 Flyway 或 Liquibase 进行数据库迁移版本化管理
+- 迁移文件必须随应用代码版本化管理（提交到代码仓库）
+- 禁止在生产环境执行手动DDL（即使使用GUI工具）
+
+**迁移规范
+- 迁移文件命名：`V{版本}__{描述}.sql`，如 `V20260421__add_user_phone_index.sql`
+- **只加不改**：迁移文件一旦上线**禁止修改**（向后兼容性保障）
+- 如需变更：新增迁移文件，而非修改已有迁移
+- 大表DDL（>100万行）：必须使用 pt-online-schema-change 或 gh-ost，禁止直接 ALTER
+- 迁移必须可逆：提供 `undo` 脚本（如使用 Flyway undo）
+
+**Review要求
+- 所有数据库迁移必须经过数据库专家（expert-database）评审
+- 重大迁移（分区/大表结构变更）必须经过架构评审
+
+**禁止事项
+- ❌ 禁止生产环境手动执行DDL
+- ❌ 禁止在同一条迁移中添加多个不相关变更
+- ❌ 禁止在迁移中删除列/表，除非有完整的备份策略
+
+### L3-Java：Java编码专章
+
+**适用范围
+
+**包结构
+```
+com.{公司}.{业务线}.{模块}
+├── controller     // 接口层（入参校验、响应封装）
+├── service        // 业务逻辑（@Transactional标注在此层）
+├── repository     // 数据访问（JPA/MyBatis）
+├── domain        // 实体、值对象
+├── dto           // 数据传输对象
+├── config        // 配置类
+└── exception     // 业务异常定义
+```
+
+**@Transactional规范
+- 默认readOnly=false，**明确指定readOnly=true**以利用数据库读优化
+- 超时设置：`@Transactional(timeout = 30)`（关键路径必须设置）
+- 传播行为：跨服务调用必须显式指定 propagation
+- **禁止**在service方法内部调用同类其他方法（绕过代理事务）
+
+**统一响应格式
+所有Controller必须使用 `Result<T>` 封装响应：
+```java
+// 成功
+Result.ok(data)          // HTTP 200
+Result.ok(data, "创建成功") // HTTP 201
+
+// 失败
+Result.fail(10001, "参数错误")      // HTTP 400
+Result.fail(10403, "权限不足")      // HTTP 403
+Result.fail(10504, "资源不存在")    // HTTP 404
+```
+
+**@Valid 校验
+- Controller入参**必须**使用 `@Valid` 或 `@Validated` 触发校验
+- 使用JSR-303注解（`@NotNull/@NotBlank/@Size/@Email`等）
+- 自定义校验器实现 `ConstraintValidator`
+
+**禁止事项
+- ❌ 禁止使用 `SELECT *`，必须显式指定字段列表
+- ❌ 禁止在SQL中使用字符串拼接（必须参数化）
+- ❌ 禁止 `createQuery()` 动态拼接用户输入
+- ❌ Lombok：`@Data` 禁止用于Entity（getter会被框架代理），使用 `@Getter @Setter` 替代
+- ❌ 禁止 `ObjectInputStream` 不使用白名单
+
+### L3-009：代码注释规范
+
+**【必须注释的情况
+
+- 文件头（每个源文件必须包含）/ File header (required in every source file)
+- 导出函数（所有 public 函数必须包含 JSDoc/DocString）/ Exported functions (all public functions require JSDoc/DocString)
+- 复杂业务逻辑（超过3层嵌套/关键算法/状态机/边界条件）/ Complex business logic (>3 nested layers/key algorithms/state machines/boundary conditions)
+- 常量/枚举（含单位说明）/ Constants/enums (include unit descriptions)
+
+**【禁止注释
+
+- ❌ 显而易见的行为（如：i += 1 # i自增）/ Obvious behavior (e.g., i += 1 # i increment)
+- ❌ 与代码矛盾的注释（发现时立即修复）/ Comments contradicting code (fix immediately when discovered)
+
+**【TODO注释格式
+
+- // TODO(author): {描述} + issue编号
+
+### L3-010：API端点注释
+
+**所有 API 端点必须包含 OpenAPI 3.0 注解
+
+```typescript
+/**
+ * @summary 用户注册
+ * @param {object} body - 注册请求体
+ * @param {string} body.username - 用户名（3-64字符）/ Username (3-64 characters)
+ * @param {string} body.password - 密码（8位以上）/ Password (8+ characters)
+ * @returns {object} { code: 0, data: { user_id } }
+ * @throws {400} 参数校验失败
+ * @throws {409} 用户名已存在
+ */
+POST /uam/v1/accounts/register
+```
+
+---
+
+## 第四部分：L4 规范
+
+### L4-001：Kubernetes加固
+
+**系统加固（必须全部启用）/ System hardening (all must be enabled)：**
+
+- User/Group：非root用户
+- NoNewPrivileges：true
+- ProtectSystem：strict
+- ProtectHome：true
+- PrivateTmp：true
+- SystemCallFilter：@system-service
+- ReadOnlyRootFilesystem：true（如可行
+- ResourceQuota：设置 CPU/内存上限
+
+**健康检查
+
+- Liveness：/healthz（失败重启
+- Readiness：/readyz（失败停止流量
+
+### L4-002：监控四大支柱
+
+**四大监控支柱
+
+- **Metrics（Prometheus）**：QPS
+- **Tracing（Jaeger）**：trace_id 全链路透传
+- **Logging（Fluentd→Kafka/ES）**：JSON格式，保留≥30天（审计≥180天）/ JSON format, retention ≥30 days (audit ≥180 days)
+- **Health（/healthz + /readyz）**：存活 + 就绪（含依赖检查）/ Liveness + Readiness (including dependency check)
+
+**SLO/SLI强制声明
+每个服务在设计阶段**必须**文档化SLO（Service Level Objective）和关联的SLI（Service Level Indicator）：
+- 格式：服务名_SLO = {可用率目标}%
+- 示例：`api-gateway_SLO = 99.95%
+- SLO必须与告警规则绑定：错误预算消耗>50%=P1，>80%=P0
+- SLO变更必须经过架构评审并更新ADR
+
+（SLO/SLI声明：专家团队评审新增）
+
+### L4-003：告警分级
+
+**告警分级定义
+
+- **P0 紧急（立即处理）/ P0 Critical (immediate action)**：服务不可用
+- **P1 高优（15分钟）/ P1 High (15 min)**：错误率>1%
+- **P2 中优（当天）/ P2 Medium (same day)**：错误率>0.5%
+- **P3 低优（3天）/ P3 Low (3 days)**：一般告警 → IM
+
+### L4-004：SLA计算
+
+**SLA计算公式
+可用性 = (总时间-不可用时间)/总时间
+
+**常见SLA目标
+
+| SLA | 年不可用时间
+|-----|-------------------------------|
+| 99.9% | <8.7小时
+| 99.95% | <4.4小时
+| 99.99% | <53分钟
+
+**告警与错误预算
+- 告警阈值 = SLA目标×0.8
+- 错误预算消耗>50% → 冻结非关键发布
+- 错误预算消耗>100% → 立即止损
+
+### L4-005：结构化日志
+
+**结构化日志规范
+
+- 格式
+- 必须字段
+- 禁止记录
+- 错误日志必须包含
+
+### L4-006：Saga分布式事务
+
+**Saga模式说明
+使用 Saga 模式处理跨服务分布式事务（编排式或编排器式）
+Use Saga pattern for cross-service distributed transactions (choreography or orchestration)
+
+**补偿事务设计原则
+
+- 补偿操作必须确定性（可重试）/ Compensating operations must be deterministic (retryable)
+- 补偿顺序与原顺序相反
+- 每个步骤必须有超时机制
+- 每个步骤和补偿都必须幂等
+
+### L4-007：CQRS读写分离
+
+**CQRS命令与查询分离
+
+- **命令端（写）/ Command side (write)**：RegisterAccount, Login, UpdateProfile, BindThirdParty
+- **查询端（读）/ Query side (read)**：QueryAccountById, QuerySessionsByAccountId
+- **Event Sourcing
+
+### L4-008：发布流程
+
+**发布流程时间表
+
+- **T-2 天
+- **T-1 天
+- **发布
+- **发布后
+
+---
+
+## 第五部分：L5 推荐
+
+### L5-001：数据建模
+
+**数据建模原则
+
+- 按 DDD 领域建模，每个聚合根（Aggregate Root）维护一致性边界
+- 每个模块独立数据存储（Database per Service）/ Each module has independent data storage (Database per Service)
+- 使用事件总线实现跨模块数据共享
+
+### L5-002：事件风暴
+
+**事件风暴说明
+
+- 使用事件风暴进行领域建模：领域事件→命令→聚合→限界上下文
+- 支持快速识别业务边界和关键流程
+
+### L5-003：等保三级增强
+
+**相比二级额外要求
+
+**【身份鉴别+】/ Identity Authentication+】**
+双重因素强制
+Dual factor mandatory
+
+**【访问控制+】/ Access Control+】**
+三权分立（系统管理员/安全管理员/审计管理员）/ 强制访问控制（MAC）
+Three-power separation (System Admin/Security Admin/Audit Admin)
+
+**【安全审计+】/ Security Audit+】**
+实时监控告警
+Real-time monitoring alerts
+
+**【数据保护+】/ Data Protection+】**
+数据分类分级
+Data classification
+
+**【网络保护+】/ Network Protection+】**
+WAF抗APT
+WAF against APT
+
+**【入侵防范+】/ Intrusion Prevention+】**
+IDS
+IDS
+
+### L5-004：等保定级预测
+
+**定级三要素
+
+- **受侵害客体
+- **侵害程度
+
+**典型定级
+- Level 1：企业内部资讯系统、工具类应用
+- Level 2：用户管理系统、API密钥管理系统（本文档默认目标）/ User management system, API key management (default target of this document)
+- Level 3：支付系统、核心交易平台
+
+**定级流程
+识别客体→评估程度→确定等级→编写报告→专家评审（Level 2+）
+Identify object → Assess degree → Determine level → Write report → Expert review (Level 2+)
+
+---
+
+## 第六部分：L6 参考
+
+### L6-001：术语表
+
+| 中文
+|----------------|---------|-------------------|
+| 领域驱动设计 | DDD (Domain-Driven Design) | 强调业务领域建模和边界划分
+| 限界上下文 | Bounded Context | DDD中的领域边界，每个BC有独立领域模型
+| 聚合根 | Aggregate Root | 聚合内唯一入口，维护一致性边界
+| Saga | Saga | 分布式事务模式，通过本地事务+补偿实现跨服务一致
+| 命令查询职责分离 | CQRS (Command Query Responsibility Separation) | 写入和读取使用不同模型
+| 事件溯源 | Event Sourcing | 存储状态变更事件而非最终状态
+| 断路器 | Circuit Breaker | 故障时快速失败，防止级联故障
+| 后端专属前端 | BFF (Backends for Frontends) | 为不同前端提供定制API的架构模式
+| 服务网格 | Service Mesh | Sidecar代理实现mTLS/流量管理
+| 每服务数据库 | Database per Service | 每个微服务拥有独立数据库
+| RED指标 | RED Metrics | Rate/Errors/Duration服务层监控指标
+| USE指标 | USE Metrics | Utilization/Saturation/Errors资源层监控指标
+| 架构决策记录 | ADR (Architecture Decision Records) | 记录重要架构决策的背景、决策和后果
+| 恒等性 | Idempotency | 同一操作多次执行结果一致
+| 死信队列 | DLQ (Dead Letter Queue) | 失败消息的存储队列
+
+### L6-002：AI服务商清单（24家）/ AI Service Provider List
+
+| 服务商
+|-----------------|--------------------------|----------------------------------|
+| OpenAI | api_key, organization | platform.openai.com |
+| Anthropic | api_key | anthropic.com |
+| 阿里云百炼
+| DeepSeek | api_key, base_url | platform.deepseek.com |
+| Groq | api_key, base_url | console.groq.com |
+| HuggingFace | api_key | huggingface.co |
+| Azure OpenAI | api_key, base_url, api_version | azure.microsoft.com |
+| Cohere | api_key | cohere.com |
+| AI21 Labs | api_key | ai21.com |
+| Stability AI | api_key | stability.ai |
+| Zhipu AI | api_key | open.bigmodel.cn |
+| Moonshot AI | api_key, base_url | platform.moonshot.cn |
+| 01.AI | api_key, base_url | platform.01.ai |
+| StepFun AI | api_key | stepfun.com |
+| IBM watsonx | api_key, base_url, project_id | ibm.com/watsonx |
+| Replicate | api_key | replicate.com |
+| RunPod | api_key, base_url | runpod.io |
+| Modal | api_key | modal.com |
+| Together AI | api_key | together.ai |
+| Perplexity | api_key | perplexity.ai |
+| Lepton AI | api_key, base_url | lepton.ai |
+| Vercel AI | api_key | vercel.com/ai |
+| Meta AI | api_key | ai.meta.com |
+| Mistral AI | api_key | mistral.ai |
+| OpenRouter | api_key, base_url | openrouter.ai |
+
+### L6-003：16类基础服务能力矩阵
+
+#### 第一梯队 — 必须建设
+
+**A. UAM — 用户与账户服务
+能力
+Account register/login/session Token/SSO/MFA/third-party OAuth/device fingerprint
+
+**B. PAY — 支付与交易服务
+能力
+WeChat Pay/Alipay/UnionPay QuickPass/Digital RMB/PayPal/Stripe
+
+**C. SMS — 安全与合规服务
+能力
+MFA/RBAC permission management/fraud detection/audit logs/PCI-DSS compliance
+
+**D. CFG — 配置与开关服务
+能力
+Multi-environment config/namespace isolation/version management/gradual release/realtime push/sensitive encryption
+
+#### 第二梯队 — 尽快建设
+
+**E. NTF — 消息通知服务
+能力
+SMS/email/app push/in-app message/template management/rate control/smart routing
+
+**F. DAT — 数据采集服务
+能力
+Frontend SDK/backend SDK/app SDK/event model/data validation/realtime monitoring
+
+**G. MED — 媒体处理服务
+能力
+Resumable upload/image processing (thumbnail/watermark/format conversion)/video transcoding/storage
+
+**H. MKT — 营销优惠服务
+能力
+Coupons/quantity discounts/discounts/stacking calculation/budget control/inventory management/campaign management
+
+**I. PIM — 积分会员服务
+能力
+Points account/points earning/points redemption/membership level/growth value/points mall
+
+#### 第三梯队 — 按需建设
+
+**J. MOD — 内容审核服务
+能力
+Text moderation/image moderation/video moderation/prohibited content detection/precision/recall modes
+
+**K. GMG — 用户增长服务
+能力
+Invite code/fission/team purchase/task system/A/B testing/anti-fraud risk control
+
+**L. CSC — 客服工单服务
+能力
+Ticket create/process/close/rate/FAQ Q&A/knowledge base/data analysis
+
+**M. SRS — 搜索推荐服务
+能力
+Full-text search/semantic search/highlight/correction/personalized recommendation/collaborative filtering
+
+**N. CDN — 内容分发服务
+能力
+Global acceleration/HTTPS/anti-hotlink/cache strategy/performance optimization
+
+#### 第四梯队 — 长期规划
+
+**O. INS — 分析洞察服务
+能力
+Funnel analysis/retention analysis/path analysis/attribution analysis/user profiling/report dashboard
+
+**P. STR — 实时计算服务
+能力
+Real-time ETL/real-time metrics/real-time risk control/unified stream-batch/Flink
+
+**Q. OPS — 运营效率服务
+能力
+Message center/popup management/banner management/CMS content management/form system
+
+### L6-004：基础服务依赖关系矩阵
+
+| 被依赖\依赖
+|----------------------------------------|-----|-----|-----|-----|-----|-----|-----|-----|
+| UAM (用户账户
+| PAY (支付
+| SMS (安全
+| NTF (消息通知
+| MOD (内容审核
+| CSC (客服工单
+| MKT (营销优惠
+| PIM (积分会员
+
+**核心依赖解读
+
+1. UAM 是几乎所有服务的强依赖（用户身份是基础）/ UAM is a strong dependency for almost all services (user identity is fundamental)
+2. PAY 依赖 UAM 和 SMS（支付必须知道谁付、是否安全）/ PAY depends on UAM and SMS (payment must know who pays and if it's secure)
+3. MKT 和 PIM 互相强依赖（积分和优惠通常联动）/ MKT and PIM have strong mutual dependency (points and promotions usually linked)
+4. GMG 依赖多个服务（增长是综合能力体现）/ GMG depends on multiple services (growth is a comprehensive capability)
+
+### L6-005：技术实现建议
+
+**【自建 vs SaaS选型
+
+**建议自建（复用价值高+数据敏感）/ Recommended for self-build (high reuse value + data sensitive)：**
+- UAM/PAY/SMS（数据必须自主可控
+- MKT/PIM/GMG（业务核心know-how
+- CFG（深度集成开关
+- DAT（数据资产
+
+**可选SaaS（标准化程度高+接入成本低）/ Optional SaaS (high standardization + low integration cost)：**
+- NTF（短信通道可采购阿里云/腾讯云
+- MOD（内容审核可采购网易/数美
+- MED（媒体处理可采购阿里云视频云
+- CDN（可采购阿里云CDN/腾讯云CDN
+- CSC（可采购Zendesk/Udesk
+
+**【技术栈建议
+
+- 后端框架
+- 数据库
+- 消息队列
+- 缓存
+- 搜索
+- 文件存储
+- 实时计算
+- 报表
+
+---
+
+## 归档索引
+
+> 以下源文档已整合至本统一标准 v2.1.0，旧版本标注为 **过时**。
+> The following source documents have been integrated into this unified standard v2.1.0; old versions are marked as **Obsolete**.
+
+| 原文件
+|------------------|--------------|-------------------|
+| ESD-MANDATORY-001.md | ⛔ 过时
+| 企业产品研发全链路统一标准.md | ⛔ 过时
+| Enterprise-Commerce-Golden-Standard.md | ⛔ 过时
+| Enterprise-Commerce-Product-Architecture-Standard-v2.md | ⛔ 过时
+| 附录A-商业化通用基础服务清单.md | ⛔ 过时
+
+存放位置
+
+**当前有效版本
+
+---
+
+## 版本历史
+
+| 版本
+|---------------|------------|-------------------|
+| v1.0.0 | 2026-04-19 | 初始版本，整合ESD/ECGS/ECPAS为统一标准
+| v2.0.0 | 2026-04-19 | 整合5个源文档，保留全部核心内容：10条L1强制标准、30项等保技术要求、24家AI服务商、16类基础服务、TDD/CI规范
+| v2.0.1 | 2026-04-19 | 技术选型商业运营优先：后端Java Spring Boot P0、前端React P0、数据库PostgreSQL P0，补充完善各技术组件优先级
+| v2.1.0 | 2026-04-19 | 完整中英文对照版本：所有标准条目100%中英双语、添加文档目录、统一标题格式"中文
+| v2.2.0 | 2026-04-20 | L1-008新增强制标准-004：标准修订版本管理；任何修订须评估变更分类后升版（MAJOR/MINOR/PATCH）/ L1-008 added Mandatory-004: Standard Revision Version Management; any revision requires change category evaluation before version escalation |
+| v2.3.0 | 2026-04-20 | L2-006技术选型新增强制标准-005：自建UI系统优先；已有成熟自建UI系统时必须优先使用，自建系统须含设计令牌、多主题、完整组件库
+| v2.4.0 | 2026-04-20 | L2-007新增强制标准-006：多端适配优先
+| v2.5.0 | 2026-04-21 | 专家团队评审升版：L2新增AI系统架构(L2-AI-Arch)/需求管理(L2-011)/MVP(L2-012)/技术债务(L2-014)/版本规划(L2-015)；L1强化JWT完整规范/IDOR/XXE/反序列化/XSS/CSRF；L1-010分级覆盖率；L3新增数据库迁移/Java专章；L4新增灾备(L4-009)/SLO强制/ADR强制/BFF定位；CI新增DAST/ProductionGate/契约测试；前端安全入CI
+| v2.6.0 | 2026-04-22 | 专家团队研讨会（8角色）升版：L1新增SSRF/路径遍历/日志注入安全基线+JWT密钥轮换；L1-001修正分层定义与依赖层级说明；L1-004新增数据保留期/跨模块updated_by规范；L1-006新增分页/幂等性/限流规范；L1-007新增金融场景低延迟配置；L2-006新增GitOps/ServiceMesh/IaC扫描/容器镜像安全；L2-006前端性能标准（FCP/LCP/CLS/INP）；L3新增性能测试规范；L4新增混沌工程/变更管理/事件管理规范；L5新增数据仓库/ETL/指标体系规范；前端安全编码专章；量化交易系统附录（附录B）/ Expert workshop (8 roles): L1 added SSRF/path traversal/log injection + JWT key rotation; L1-001 fixed layering definition; L1-004 added data retention/cross-module updated_by; L1-006 added pagination/idempotency/rate limiting; L1-007 added financial low-latency config; L2-006 added GitOps/ServiceMesh/IaC scanning/container image security; L2-006 frontend performance standards; L3 added performance testing; L4 added chaos engineering/change management/incident management; L5 added data warehouse/ETL/metrics system; Frontend secure coding chapter; Quantitative trading appendix (Appendix B) |
+
+---
+
+### L4-009：灾备与业务连续性
+
+**适用范围
+
+**RPO/RTO定义
+| 服务级别
+|----------------------|----------------|-----------------|------------------------|
+| 核心服务
+| 重要服务
+| 一般服务
+
+**备份策略
+- 全量备份：每周一次（低峰期）
+- 增量备份：每日一次
+- 事务日志备份：每15分钟一次（核心服务）
+- 备份验证：**每月至少一次**恢复演练，验证备份有效性
+- 备份存储：异地存储（与主数据中心距离≥100km）
+
+**灾备架构
+- 核心服务必须实现**同城双活**或**两地三中心**架构
+- 密钥管理服务（KeyVault类）：必须支持跨地域复制（主备距离≥500km）
+- 自动故障切换：主节点不可用时，备用节点自动接管（RTO内完成）
+
+**CMK密钥轮换
+- 对称密钥（CMK）：**每年强制轮换一次**
+- 轮换期间历史数据解密能力必须保留（使用历史密钥版本）
+- 轮换记录必须写入审计日志
+
+**禁止事项
+- ❌ 核心服务单点部署
+- ❌ 备份数据与主数据存同一可用区
+- ❌ 无测试的备份视为无效
+
+### L4-Chaos：混沌工程
+
+**适用范围
+
+**故障注入测试矩阵
+
+|| 故障场景 | 预期行为 | 验证指标 |
+||----------|----------|----------|
+| 网络延迟（100ms/500ms/1s） | 熔断器打开，不级联 | 错误率 < 1% |
+| 服务节点宕机（1/3/全部） | 自动故障转移，RTO内恢复 | RTO ≤ 30分钟 |
+| 数据库连接耗尽 | 限流降级，返回友好错误 | P99 < 500ms |
+| Kafka分区不可用 | 消息进入DLQ，不丢失 | 消息最终被消费 |
+| Redis缓存失效 | 回源数据库，不击穿 | 数据库QPS在容限内 |
+
+**量化交易系统增强
+- 交易所连接断开：自动切换+告警，1分钟内通知
+- 行情数据延迟/丢失：触发数据质量告警，启动应急
+- 订单处理超时：禁用重试（防止重复成交），立即返回错误
+
+**演练要求
+- 核心服务每季度至少一次故障演练（GameDay）
+- 演练后必须复盘，修复发现的问题
+- 故障类型：网络延迟/丢包、进程kill、时钟偏移、依赖故障
+
+**工具
+
+### L4-Change：变更管理
+
+**适用范围
+
+**变更分类
+
+|| 分类 | 定义 | 审批流程 |
+||------|------|----------|
+| Normal（普通） | 标准变更，提前3天申请 | CI/CD审批流 |
+| Standard（标准） | 已知变更模式，预批准 | 自动通过 |
+| Emergency（紧急） | 紧急故障修复 | 电话审批，事后复盘 |
+
+**变更窗口
+- 核心服务禁止在 00:00-06:00 发布（非交易时段）
+- 金融交易系统变更窗口：盘后时间（15:00-18:00）优先
+
+**强制要求
+- 每次变更必须记录：变更内容、预期影响、回滚方案
+- 变更前必须验证：监控仪表盘就绪、回滚脚本测试通过
+- 禁止绕过GitOps直接操作集群
+
+### L4-Incident：事件管理
+
+**事件分级
+
+|| 分级 | 响应时效 | 修复时限 | 通知范围 |
+||------|----------|----------|----------|
+| SEV-1 | 5分钟 | 30分钟 | 全员通知 |
+| SEV-2 | 30分钟 | 2小时 | 团队+管理层 |
+| SEV-3 | 4小时 | 下个工作日 | 团队 |
+
+**量化交易系统增强
+- 交易引擎故障：自动切换到备用引擎，RTO≤2分钟
+- 行情数据中断：5秒内告警，30秒内启动应急
+- 交易所连接故障：自动重连+告警，1分钟内通知
+
+**事件管理流程
+1. 检测与分派 → 2. 响应与沟通 → 3. 调查与修复 → 4. 恢复与验证 → 5. 事后复盘
+
+**Postmortem要求
+- SEV-1/SEV-2 必须完成Postmortem
+- 模板：事件摘要 → 时间线 → 根因分析 → 改进措施 → 行动项
+- 复盘结论必须文档化并存档
+
+---
+
+## 附录B：量化交易系统补充规范
+
+> **性质**：本附录是UNI-MANDATORY-001的补充规范，适用于沪深两市量化交易系统。
+> **Nature**: This appendix supplements UNI-MANDATORY-001 for quantitative trading systems in Shanghai and Shenzhen stock markets.
+
+### B1：范围与定级
+
+**适用范围
+- 证券交易系统（股票、ETF、期权、融资融券）
+- 量化策略研发与回测平台
+- 资产管理与风控系统
+
+**等保定级
+- 量化交易系统属于 **Level 3**（支付系统、核心交易平台），执行等保三级增强要求
+
+---
+
+### B2：架构特殊要求
+
+**L1-012：金融交易系统特殊架构约束
+
+- **订单处理延迟**：P99 ≤ 10ms（交易所→系统→成交回报）
+- **熔断策略**：价格剧烈波动时自动暂停交易（个股涨跌幅>10%触发）
+- **仓位风控前置检验**：每次下单前必须校验持仓限额、保证金比例
+- **事务预检机制**：交易前必须完成资金冻结、持仓校验
+
+**L2-012：领域模型版本管理
+
+- 领域事件必须版本化（Event Schema Evolution）
+- 向后兼容：新增字段不得破坏旧事件解析
+- 领域模型变更必须经过架构评审
+
+**L4-012：量化数据存储与回测架构
+
+- **时序数据库选型**：TimescaleDB
+- **数据分区策略**：按时间+标的代码分区
+- **回测环境与生产环境隔离**：完全独立的数据副本
+- **Tick数据压缩**：1分钟K线/5分钟K线多级存储
+
+---
+
+### B3：风控与安全增强
+
+**B3-1：交易风控规则
+
+| 风控指标 | 阈值 | 处理措施 |
+|----------|------|----------|
+| 单笔最大下单金额 | ≤持仓市值20% | 拒绝下单 |
+| 日内最大亏损 | ≤账户净值5% | 禁止开仓，触发止损 |
+| 持仓集中度 | 单标的≤30% | 告警+需要确认 |
+| 杠杆率 | 融资≤1:1 | 超出拒绝 |
+
+**B3-2：密钥与认证增强
+
+- **HSM（硬件安全模块）**：交易密钥加密/解密必须在HSM中完成
+- **交易密码+资金密码双鉴权**：大额/异常交易必须双因素认证
+- **交易所API Key**：加密存储，运行时从KMS获取，禁止明文日志
+- **密钥轮换**：交易密钥月度轮换，私钥永不离开HSM
+
+**B3-3：审计日志增强
+
+- 时间戳精确到**毫秒**
+- 必须包含：操作者ID、IP地址、订单详情、策略ID
+- 日志实时同步到独立安全日志服务器
+- **保留期≥5年**（金融监管要求）
+- 操作前快照（Before-image）和操作后快照（After-image）
+
+---
+
+### B4：数据工程增强
+
+**B4-1：因子计算与回测
+
+- 因子定义必须**版本化**
+- 回测/实盘数据必须使用**同一数据源**
+- Look-ahead bias防控：因子计算时严格时间对齐
+
+**B4-2：行情数据标准化
+
+- 多源行情整合：不同交易所数据格式统一
+- 前复权/后复权/不复权数据管理策略
+- **实时行情延迟>1秒必须告警**
+
+**B4-3：清算对账
+
+- T+1自动对账：系统内账户余额=外部交易所记录
+- 实时对账：每分钟对账核心账户
+- 差异告警→人工介入
+
+---
+
+### B5：灾备与业务连续性增强
+
+**RPO/RTO更严格标准
+
+| 服务级别 | RPO | RTO | 说明 |
+|----------|-----|-----|------|
+| 核心交易 | **≤1分钟** | **≤5分钟** | 交易数据零丢失 |
+| 风控引擎 | ≤1分钟 | ≤2分钟 | 实时风控不可中断 |
+| 行情数据 | ≤5秒 | ≤30秒 | 行情中断视为P0 |
+
+**强制演练要求
+- 备份恢复演练：**每两周一次**
+- 故障切换演练：**每月一次**
+- 全链路切换演练：**每季度一次**
+
+**数据一致性验证
+- 切换后必须立即执行数据一致性校验
+- 验证：订单状态、账户余额、持仓数据完全一致
+
+---
+
+### B6：量化交易系统禁止事项
+
+- ❌ **禁用异步补偿**：交易必须同步确认，补偿失败触发人工审核
+- ❌ **禁用最终一致性模型**：资金与持仓必须强一致
+- ❌ **交易链路禁用重试**：防止重复成交
+- ❌ **金融产品禁用快速灰度**：必须全量发布+回滚预案
+- ❌ **禁止在URL中传递交易参数**：账号/金额/标的必须用Body
+- ❌ **交易数据禁止物理删除**：Insert-only，日终归档
+
+---
+
+**文档结束
