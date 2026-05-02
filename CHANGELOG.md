@@ -1,10 +1,8 @@
 ## Contributor Identity
-- **GitHub ID**: trigold786
-- **Application & Version**: 一号文件-v1.2.2
-- **Content Author (Model ID)**: doubao-seed-2.0-pro
+- GitHub ID: trigold786
+- Application&Version: 一号文件-v1.2.3
+- Content Author (Model ID): doubao-seed-2.0-pro
 ## 更新内容
-1. 修正命名错误：统一规范名称为「一号文件」，删除所有错误的「一号手册」命名
-2. 清除所有特定项目关联内容：仅保留通用规则，具体项目信息全部改为举例或删除
-3. 新增6项Superpowers最佳实践到开发L1铁则
-4. 新增全量项目记录留存通用规范、统一归档路径规则
-5. 优化目录结构规则为通用标准，适配任意项目
+1. 优化序号为多层级结构，明确体现内容层级位置，用户通过序号即可判断内容所属层级
+2. 补充「优先复用已有基础组件」的具体清单，明确11种可直接复用的通用组件
+3. 补充「中间件」的包含/不包含范围，明确允许使用的8类中间件，禁止使用的4类中间件，消除歧义
